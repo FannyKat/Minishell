@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 16:17:01 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/13 12:45:40 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/03/15 17:08:35 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,6 +18,13 @@
 # include <unistd.h>
 # include <stdlib.h>
 # include <limits.h>
+#include <stdarg.h>
+
+typedef struct		s_printf
+{
+	int				flag;
+	void 			(*f)(va_list*);
+}					t_printf;
 
 typedef struct		s_list
 {
@@ -61,7 +68,7 @@ int					ft_isprint(int c);
 int					ft_toupper(int c);
 int					ft_tolower(int c);
 int					ft_isspace(int c);
-int					ft_blank(int c);
+int					ft_isblank(int c);
 void				*ft_memalloc(size_t size);
 void				ft_memdel(void **ap);
 char				*ft_strnew(size_t size);
@@ -99,5 +106,10 @@ int					get_next_line(const int fd, char **line);
 t_list				*ft_xlstadd(void *data);
 void				ft_lstmerge(t_list *list1, t_list *list2);
 char				*ft_strtolower(char *str);
+void				my_printf(char *format, ...);
+void				fun_s(va_list *ap);
+void				fun_c(va_list *ap);
+void				fun_d(va_list *ap);
+char				**ft_split(char *s);
 
 #endif

@@ -8,20 +8,26 @@ CC		=	clang -I /usr/local/include
 
 CFLAGS	+=	-Wall -Wextra
 
+PURPLE	=	\033[38;5;105m
+BLUE	=	\033[38;5;141m
+PINK	=	\033[38;5;177m
+END		=	\033[0m
+
 $(NAME):	$(OBJ)
-		@make -C libft
-		$(CC) $(CFLAGS) libft/libft.a $(SRC) -o $(NAME)
+	@make -C ./libft
+	@echo "${PINK}LIBRARY COMPILED${END}"
+	@$(CC) $(CFLAGS) ${SRC} ./libft/libft.a -o $(NAME)
 
 all:		$(NAME)
 
 clean:
-		rm -rf $(OBJ)
-		@make -C libft clean
+	@/bin/rm -rf $(OBJ)
+	@make -C ./libft/ clean
+	@echo "${BLUE}clean obj${END}"
 
-fclean:
-		rm -rf $(NAME)
-		@make -C libft fclean
-
-re:		fclean all
+fclean:		clean
+	@/bin/rm -rf $(NAME)
+	@make -C ./libft/ fclean
+	@echo "${BLUE}clean $(NAME)${END}"
 
 .PHONY: all clean fclean re

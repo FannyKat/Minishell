@@ -1,17 +1,17 @@
 NAME 	=	minishell
 
-SRC 	=	minishell.c\
+SRC 	=	init.c utils.c fork.c\
 
-OBJ		=	$(SRC:.c=.o)
+OBJ	=	$(SRC:.c=.o)
 
-CC		=	clang -I /usr/local/include
+CC	=	clang -I /usr/local/include
 
 CFLAGS	+=	-Wall -Wextra
 
 PURPLE	=	\033[38;5;105m
 BLUE	=	\033[38;5;141m
 PINK	=	\033[38;5;177m
-END		=	\033[0m
+END	=	\033[0m
 
 $(NAME):	$(OBJ)
 	@make -C ./libft

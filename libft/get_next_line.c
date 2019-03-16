@@ -57,7 +57,7 @@ static int		read_buf(int fd, char **buffer, char **line)
 
 int				get_next_line(const int fd, char **line)
 {
-	static char		*buffer[OPEN_MAX];
+	static char		*buffer[_SC_OPEN_MAX];
 
 	if (check_error(fd, line) == -1)
 		return (-1);

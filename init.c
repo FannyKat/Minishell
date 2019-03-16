@@ -22,8 +22,9 @@ void		display_prompt()
 
 int			main(int ac, char **av, char **env)
 {
-	char		**cmds;
+	char		**cmd;
 	char		*input;
+	int		ret;
 
 	if (ac == 1)
 	{
@@ -34,10 +35,12 @@ int			main(int ac, char **av, char **env)
 			get_next_line(0, &input);
 			if (input && !ft_strcmp(input, "exit"))
 				return (0);
-			cmds = ft_split(input);
-			if (*cmds)
-				exec_cmd(cmds, env);
+			cmd = ft_strsplit(input, ' ');
+			if (*cmd)
+				ret = exec_cmd(cmd, env);
+			if (ret == -1)
+				break ;
 		}
 	}
-	return (1);
+	return (0);
 }

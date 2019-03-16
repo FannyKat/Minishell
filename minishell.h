@@ -12,5 +12,6 @@ void	signal_handler(int signum);
 void	process_signal_handler(int signum);
 void	display_prompt();
 int	exec_cmd(char **cmd, char **env);
+int	echo_builtin(char **av);
 
 #endif

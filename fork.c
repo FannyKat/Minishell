@@ -3,7 +3,7 @@
 static int		run_fork(char *path, char **av, char **env)
 {
 	pid_t		pid;
-
+	
 	pid = fork();
 	signal(SIGINT, process_signal_handler);
 	if (pid == 0)
@@ -23,11 +23,11 @@ static int		check_builtins(char **cmd)
 {
 	if (!ft_strcmp(cmd[0], "exit"))
 		return (-1);
-/*	else if (!ft_strcmp(cmd[0], "cd"))
-		return (cd_builtin(cmd + 1));
 	else if (!ft_strcmp(cmd[0], "echo"))
 		return (echo_builtin(cmd + 1));
-	else if (!ft_strcmp(cmd[0], "setenv"))
+//	else if (!ft_strcmp(cmd[0], "cd"))
+//		return (cd_builtin(cmd + 1));
+/*	else if (!ft_strcmp(cmd[0], "setenv"))
 		return (setenv_builtin(cmd + 1));
 	else if (!ft_strcmp(cmd[0], "unsetenv))
 		return (echo_builtin(cmd + 1));
@@ -85,12 +85,12 @@ static int		find_builtin(char **cmd, char **env)
 int			exec_cmd(char **cmd, char **env)
 {
 	struct stat	fd;
-	int		ret;
 
-	if ((ret = check_builtins(cmd)) == -1)
-		return (-1);
-	if (find_builtin(cmd, env))
+	printf("%d\n", check_builtins(cmd));
+	if (find_builtin(cmd, env) || check_builtins(cmd) == 1)
 		return (0);
+	if (check_builtins(cmd) == -1)
+		return (-1);
 	if (lstat(cmd[0], &fd) != -1)
 	{
 		if (fd.st_mode & S_IXUSR)	

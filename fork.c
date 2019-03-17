@@ -86,8 +86,7 @@ int			exec_cmd(char **cmd, char **env)
 {
 	struct stat	fd;
 
-	printf("%d\n", check_builtins(cmd));
-	if (find_builtin(cmd, env) || check_builtins(cmd) == 1)
+	if (check_builtins(cmd) || find_builtin(cmd, env))
 		return (0);
 	if (check_builtins(cmd) == -1)
 		return (-1);
@@ -96,7 +95,10 @@ int			exec_cmd(char **cmd, char **env)
 		if (fd.st_mode & S_IXUSR)	
 			return (run_fork(ft_strdup(cmd[0]), cmd, env));
 	}
-	ft_putstr("minishell: command not found: ");
-	ft_putendl(cmd[0]);
+	else
+	{
+		ft_putstr("minishell: command not found: ");
+		ft_putendl(cmd[0]);
+	}
 	return (0);
 }

@@ -11,19 +11,20 @@ int		echo_builtin(char **av)
 		return (1);
 	else if (av[0][0] == '-' && av[0][1] == 'n')
 		flag = 1;
-	i = 0;
+	i = -1;
 	flag ? i++ : 0;
-	while (av && av[i])
+	while (av && av[++i])
 	{
-		j = 0;
-		while (av[i] && av[i][j++])
+		j = -1;
+		while (av[i] && av[i][++j])
 		{
 			if (!(av[i][j] == '"'))
 				write(1, &av[i][j], 1);
-		}	
+		}
 		if (av[i + 1])
 			ft_putchar(' ');
-		i++;
 	}
+	if (flag == 0)
+		ft_putchar('\n');
 	return (1);
 }

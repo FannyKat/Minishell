@@ -64,7 +64,7 @@ int			main(int ac, char **av, char **env)
 				return (0);
 			if (exit_shell(input))
 				return (0);
-			cmd = ft_strsplit(input, ' ');
+			cmd = ft_split(input);
 			if (*cmd)
 				if ((ret = exec_cmd(cmd, env)) == -1)
 				{

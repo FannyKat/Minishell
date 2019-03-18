@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:50:10 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/15 17:08:19 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/03/18 14:29:09 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,12 +47,11 @@ int			count_words(char *str)
 		str += count_sep(str);
 	}
 	return (count);
-
 }
 
-char			*ft_strcpy_to_space(char *dest, char *src)
+char		*ft_strcpy_to_space(char *dest, char *src)
 {
-	int			i;
+	int		i;
 
 	i = 0;
 	while (src && src[i] && !ft_isblank(*src))
@@ -64,7 +63,7 @@ char			*ft_strcpy_to_space(char *dest, char *src)
 	return (dest);
 }
 
-char			**ft_split(char *s)
+char		**ft_split(char *s)
 {
 	int		words_count;
 	char	**tab;

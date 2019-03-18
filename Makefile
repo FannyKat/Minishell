@@ -8,26 +8,29 @@ CC	=	clang -I /usr/local/include
 
 CFLAGS	+=	-Wall -Wextra
 
-PURPLE	=	\033[38;5;105m
-BLUE	=	\033[38;5;141m
-PINK	=	\033[38;5;177m
-END	=	\033[0m
+PINK	=	\033[35;5;108m
+PURPLE	=	\033[38;5;141m
+MAGENTA	=	\033[38;5;177m
+END		=	\033[0m
 
 $(NAME):	$(OBJ)
 	@make -C ./libft
-	@echo "${PINK}LIBRARY COMPILED${END}"
+	@echo "${MAGENTA}LIBRARY COMPILED ✓${END}"
 	@$(CC) $(CFLAGS) ${SRC} ./libft/libft.a -o $(NAME)
+	@echo "${PINK}MINISHELL IS READY ✓${END}"
 
 all:		$(NAME)
 
 clean:
 	@/bin/rm -rf $(OBJ)
 	@make -C ./libft/ clean
-	@echo "${BLUE}clean obj${END}"
+	@echo "${PURPLE}clean objs ✗${END}"
 
 fclean:		clean
 	@/bin/rm -rf $(NAME)
 	@make -C ./libft/ fclean
-	@echo "${BLUE}clean $(NAME)${END}"
+	@echo "${PURPLE}clean $(NAME) ✗${END}"
+
+re:		fclean all
 
 .PHONY: all clean fclean re

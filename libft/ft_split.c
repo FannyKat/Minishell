@@ -17,7 +17,7 @@ int			count_sep(char *str)
 	int		i;
 
 	i = 0;
-	while (str[i] && ft_isblank(*str))
+	while (str[i] && ft_isblank(str[i]))
 		i++;
 	return (i);
 }
@@ -27,7 +27,7 @@ int			count_letter(char *str)
 	int		i;
 
 	i = 0;
-	while (str[i] && !ft_isblank(*str))
+	while (str[i] && !ft_isblank(str[i]))
 		i++;
 	return (i);
 }
@@ -54,7 +54,7 @@ char		*ft_strcpy_to_space(char *dest, char *src)
 	int		i;
 
 	i = 0;
-	while (src && src[i] && !ft_isblank(*src))
+	while (src && src[i] && !ft_isblank(src[i]))
 	{
 		dest[i] = src[i];
 		i++;

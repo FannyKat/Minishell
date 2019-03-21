@@ -1,25 +1,31 @@
 NAME 	=	minishell
 
-SRC 	=	init.c utils.c fork.c builtins.c\
+SRC 	=	init.c utils.c fork.c builtins.c env_utils.c\
 
-OBJ	=	$(SRC:.c=.o)
+INC		=	minishell.h
 
-CC	=	clang -I /usr/local/include
+OBJ		=	$(SRC:.c=.o)
 
-CFLAGS	+=	-Wall -Wextra
+CC		=	clang -I /usr/local/include
+
+CFLAGS	+=	-Wall -Wextra -Werror 
 
 PINK	=	\033[35;5;108m
 PURPLE	=	\033[38;5;141m
 MAGENTA	=	\033[38;5;177m
 END		=	\033[0m
 
-$(NAME):	$(OBJ)
-	@make -C ./libft
-	@echo "${MAGENTA}LIBRARY COMPILED ✓${END}"
+$(NAME):	lib $(OBJ)
 	@$(CC) $(CFLAGS) ${SRC} ./libft/libft.a -o $(NAME)
 	@echo "${PINK}MINISHELL IS READY ✓${END}"
 
 all:		$(NAME)
+
+lib:
+	$(MAKE) -C libft
+	@echo "${MAGENTA}LIBRARY COMPILED ✓${END}"
+
+$(OBJ):		$(INC)
 
 clean:
 	@/bin/rm -rf $(OBJ)

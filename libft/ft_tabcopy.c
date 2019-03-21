@@ -1,31 +1,26 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_strnequ.c                                       :+:      :+:    :+:   */
+/*   ft_tabcopy.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2018/11/06 16:12:10 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/01/30 18:18:19 by fcatusse         ###   ########.fr       */
+/*   Created: 2019/03/21 12:29:02 by fcatusse          #+#    #+#             */
+/*   Updated: 2019/03/21 12:30:40 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int					ft_strnequ(char const *s1, char const *s2, size_t n)
+char		**ft_tabcopy(char **tab_dest, char **tab)
 {
-	unsigned int	i;
+	int		i;
 
-	i = 0;
-	if (!s1 || !s2)
-		return (0);
-	while (*s1 && *s2 && i < n)
-	{
-		if (*s1 != *s2)
-			return (0);
-		s1++;
-		s2++;
-		i++;
-	}
-	return (1);
+	i = -1;
+	tab_dest = malloc(sizeof(char *) * ft_tablen(tab));
+	while (tab && tab[++i])
+		if (!(tab_dest[i] = ft_strdup(tab[i])))
+			return (NULL);
+	tab_dest[i] = 0;
+	return (tab_dest);
 }

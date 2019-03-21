@@ -6,65 +6,86 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:21:02 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/18 17:38:08 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/03/21 18:54:17 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			unsetenv_builtin(char **av, char **env)
+int			cd_builtin(char **path, char ***env)
 {
-	int		i;
-	int		j;
+	char	*pwd;
+	//char	*old_pwd;
+	char	*new_path;
+	//char	old_path[100];
 
-	i = -1;
-	while (av && av[++i])
+	//getcwd(old_path, 100);
+	pwd = "PWD=";
+	//old_pwd = ft_strjoin("OLDPWD=", old_path);
+	if (chdir(*path) == -1)
 	{
-		j = -1;
-		while (av[i][++j] != '=')
-			;
-		if (av[i][j] == '=')
-		{
-			while (av[i][j++] != '=')
-				;
-			if (av[i][j + 1] == '=' || av[i + 1])
-				return (error(2));
-		}
+		my_printf("cd: not a directory: %s\n", *path);
+		return (-1);
 	}
-	i = -1;
-	while (env[++i])
-		if (!ft_strcmp(env[i], av[0]))
-			ft_strdel(&env[i]);
+	else
+	{
+		/** GET OLDPWD **/
+		new_path = ft_strnew(42);
+		new_path = getcwd(*path, 2048);
+		*path = ft_strjoin(pwd, new_path);
+		setenv_builtin(path, env);
+	//	setenv_builtin(&old_pwd, env);
+		free(new_path);
+	}
 	return (1);
 }
 
-int			setenv_builtin(char **av, char **env)
+int				unsetenv_builtin(char **cmd, char ***env)
 {
-	int		i;
-	int		j;
-	int		len;
-	char	*str;
+	char		*var;
+	int			i;
+	int			j;
+	int			pos;
 
+	if (!cmd[0] || cmd[1])
+		return (error(1));
 	i = -1;
-	len = -1;
-	while (env[++len])
-		;
-	while (av && av[++i])
+	while (cmd && cmd[++i])
 	{
 		j = -1;
-		while (av[i][++j] != '=')
-			str = ft_strdup(av[i]);
-		len = walking_env(str, env, j, len);
-		if (av[i][j] == '=')
-		{
-			while (av[i][j++] != '=')
-				str = ft_strcat(str, av[i]);
-			if (av[i][j + 1] == '=' || av[i + 1])
-				return (error(1));
-		}
+		while (cmd[i][++j] && cmd[i][j] != '=')
+			;
+		if (j == (int)ft_strlen(cmd[i]))
+			return (error(2));
+		var = ft_strndup(cmd[i], j);
+		pos = find_pos(var, *env);
+		if (env[pos])
+			*env = remove_var(pos, *env);
 	}
-	env[len] = ft_strdup(str);
-	env[++len] = 0;
+	return (1);
+}
+
+int				setenv_builtin(char **cmd, char ***env)
+{
+	char		*var;
+	char		*value;
+	int			i;
+	int			j;
+
+	i = -1;
+	if (!cmd[0] || cmd[1])
+		return (error(1));
+	value = ft_strchr(*cmd, '=');
+	while (cmd && cmd[++i])
+	{
+		j = -1;
+		while (cmd[i][++j] && cmd[i][j] != '=')
+			;
+		if (j == (int)ft_strlen(cmd[i]))
+			return (error(1));
+		var = ft_strndup(cmd[i], j);
+	}
+	*env = setenv_var(var, *env, value);
 	return (1);
 }
 

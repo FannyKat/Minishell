@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 16:17:01 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/18 18:20:08 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/03/21 14:13:56 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,10 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
+char				**ft_tabcopy(char **tab_dest, char **tab);
+void				print_tab(char **tab);
+int					ft_tablen(char **tab);
+int					ft_strstart(char *s1, char *s2);
 int					ft_isalnum(int c);
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);
@@ -46,6 +50,7 @@ void				*ft_memcpy(void *s1, const void *s2, size_t n);
 void				*ft_memalloc(size_t size);
 size_t				ft_strlen(const char *s);
 char				*ft_strdup(const char *s1);
+char				*ft_strndup(const char *s1, int n);
 char				*ft_strcpy(char *s1, const char *s2);
 char				*ft_strncpy(char *s1, const char *s2, size_t n);
 char				*ft_strcat(char *s1, const char *s2);
@@ -62,8 +67,6 @@ int					ft_isblank(int c);
 char				*ft_strnew(size_t size);
 void				ft_strdel(char **as);
 void				ft_strclr(char *s);
-int					ft_strequ(char const *s1, char const *s2);
-int					ft_strnequ(char const *s1, char const *s2, size_t n);
 char				*ft_strsub(char const *s, unsigned int start, size_t len);
 char				*ft_strjoin(char const *s1, char const *s2);
 char				*ft_strtrim(char const *s);

@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 14:17:56 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/18 18:23:45 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/03/21 18:53:34 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,9 +51,12 @@ int			main(int ac, char **av, char **env)
 	char	**cmd;
 	char	*input;
 	int		ret;
+	char	**new_env;
 
+	new_env = NULL;
 	if (!isatty(0))
 		return (0);
+	new_env = ft_tabcopy(new_env, env);
 	if (ac == 1 && !av[1])
 	{
 		while (1)
@@ -65,15 +68,19 @@ int			main(int ac, char **av, char **env)
 			if (exit_shell(input))
 				return (0);
 			cmd = ft_split(input);
+			free(input);
 			if (*cmd)
-				if ((ret = exec_cmd(cmd, env)) == -1)
+			{
+				if ((ret = exec_cmd(cmd, &new_env)) == -1)
 				{
 					ft_strdel(&input);
+					free(cmd);
 					break ;
 				}
-			ft_strdel(&input);
+			}
 		}
 	}
+	free(new_env);
 	ft_putendl("Just run ./minishell without arguments");
 	return (0);
 }

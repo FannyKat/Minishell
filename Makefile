@@ -8,7 +8,7 @@ OBJ		=	$(SRC:.c=.o)
 
 CC		=	clang -I /usr/local/include
 
-CFLAGS	+=	-Wall -Wextra -Werror 
+CFLAGS	+=	-Wall -Wextra -Werror
 
 PINK	=	\033[35;5;108m
 PURPLE	=	\033[38;5;141m
@@ -22,7 +22,7 @@ $(NAME):	lib $(OBJ)
 all:		$(NAME)
 
 lib:
-	$(MAKE) -C libft
+	@$(MAKE) -C libft
 	@echo "${MAGENTA}LIBRARY COMPILED ✓${END}"
 
 $(OBJ):		$(INC)

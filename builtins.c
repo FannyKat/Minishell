@@ -6,37 +6,61 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:21:02 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/21 18:54:17 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/03/22 19:05:04 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			cd_builtin(char **path, char ***env)
+void			get_path(char **path, char ***env, int num)
 {
-	char	*pwd;
-	//char	*old_pwd;
-	char	*new_path;
-	//char	old_path[100];
+	char		*pwd;
+	char 		*old_pwd;
+	char		**old_path;
 
-	//getcwd(old_path, 100);
-	pwd = "PWD=";
-	//old_pwd = ft_strjoin("OLDPWD=", old_path);
+	if (num == 1)
+	{
+		old_path = malloc(sizeof(char *) * BUFF_SIZE);
+		old_pwd = ft_strjoin("OLDPWD=", getcwd(*old_path, BUFF_SIZE));
+		*old_path = ft_strdup(old_pwd);	
+		setenv_builtin(old_path, env);
+		free(old_pwd);
+		free(*old_path);
+	}
+	if (num == 2)
+	{
+		pwd = ft_strjoin("PWD=", getcwd(*path, BUFF_SIZE));
+		*path = ft_strdup(pwd);	
+		setenv_builtin(path, env);
+		free(pwd);
+		free(*path);
+	}
+}
+
+int				cd_builtin(char **path, char ***env)
+{
+	struct stat	fd;
+
+	get_path(path, env, 1);
+	if (*path == NULL || !ft_strcmp(*path, "~"))
+	{
+		path[0] = ft_strdup("/Users/fcatusse");
+		path[1] = NULL;
+	}
 	if (chdir(*path) == -1)
 	{
-		my_printf("cd: not a directory: %s\n", *path);
+		lstat(*path, &fd);
+		if (fd.st_mode & S_IRUSR || fd.st_mode & S_IWUSR
+			|| fd.st_mode & S_IRGRP || fd.st_mode & S_IWGRP
+			|| fd.st_mode & S_IROTH || fd.st_mode & S_IWOTH) 
+			my_printf("cd: %s: Permission Denied\n", *path);
+		else
+			my_printf("cd: Not a directory: %s\n", *path);
+		free(*path);
 		return (-1);
 	}
 	else
-	{
-		/** GET OLDPWD **/
-		new_path = ft_strnew(42);
-		new_path = getcwd(*path, 2048);
-		*path = ft_strjoin(pwd, new_path);
-		setenv_builtin(path, env);
-	//	setenv_builtin(&old_pwd, env);
-		free(new_path);
-	}
+		get_path(path, env, 2);
 	return (1);
 }
 
@@ -73,6 +97,7 @@ int				setenv_builtin(char **cmd, char ***env)
 	int			j;
 
 	i = -1;
+
 	if (!cmd[0] || cmd[1])
 		return (error(1));
 	value = ft_strchr(*cmd, '=');
@@ -86,14 +111,15 @@ int				setenv_builtin(char **cmd, char ***env)
 		var = ft_strndup(cmd[i], j);
 	}
 	*env = setenv_var(var, *env, value);
+	free(var);
 	return (1);
 }
 
-int			echo_builtin(char **av)
+int				echo_builtin(char **av)
 {
-	int		i;
-	int		j;
-	int		flag;
+	int			i;
+	int			j;
+	int			flag;
 
 	flag = 0;
 	if (!av[0])

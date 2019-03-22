@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 14:17:56 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/21 18:53:34 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/03/22 19:05:02 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,11 @@ void		display_prompt(void)
 	prompt = NULL;
 	while (path[len--])
 	{
+		if (path[len + 1] == '/')
+		{
+			prompt = ft_strdup("/");
+			break ;
+		}
 		if (path[len] == '/')
 		{
 			prompt = ft_strdup(path + len + 1);
@@ -30,57 +35,67 @@ void		display_prompt(void)
 		}
 	}
 	my_printf("\033[38;5;177m[%s]\033[0m ", prompt);
+	free(prompt);
 }
 
-int			exit_shell(char *input)
+int			minishell(char ***new_env)
 {
-	int		i;
+	char	*input;
+	char	**cmd;
 
-	i = -1;
-	while (input && input[++i] && ft_isspace(input[i]))
-		;
-	if (input && !ft_strncmp(input + i, "exit", 4))
+	while (1)
 	{
-		return (!ft_isalnum(input[i + 4]));
+		display_prompt();
+		signal(SIGINT, signal_handler);
+		if (get_next_line(0, &input) <= 0)
+			return (0);
+		if (exit_shell(input))
+		{
+			ft_strdel(&input);
+			return (0);
+		}
+		cmd = ft_split(input);
+		ft_strdel(&input);
+		if (*cmd)
+			if (exec_cmd(cmd, new_env) == -1)
+			{
+				ft_tabfree(cmd);
+				break ;
+			}
 	}
+	ft_tabfree(cmd);
 	return (0);
+}
+
+char		**mini_env(char **new_env, char *pwd)
+{
+	/** TO DO HOME= **/
+	new_env = (char **)malloc(sizeof(new_env) * 5);	
+	new_env[0] = ft_strjoin("PWD=", getcwd(pwd, BUFF_SIZE));
+	new_env[1] = ft_strdup("PATH=/usr/bin:/bin:/usr/sbin:/sbin");
+	new_env[2] = ft_strdup("TERM=xterm-256color");
+	new_env[3] = ft_strdup("OLDPWD=/Users/fcatusse");
+	new_env[4] = NULL;
+	return (new_env);
 }
 
 int			main(int ac, char **av, char **env)
 {
-	char	**cmd;
-	char	*input;
-	int		ret;
 	char	**new_env;
 
 	new_env = NULL;
 	if (!isatty(0))
 		return (0);
-	new_env = ft_tabcopy(new_env, env);
 	if (ac == 1 && !av[1])
 	{
-		while (1)
-		{
-			display_prompt();
-			signal(SIGINT, signal_handler);
-			if (get_next_line(0, &input) <= 0)
-				return (0);
-			if (exit_shell(input))
-				return (0);
-			cmd = ft_split(input);
-			free(input);
-			if (*cmd)
-			{
-				if ((ret = exec_cmd(cmd, &new_env)) == -1)
-				{
-					ft_strdel(&input);
-					free(cmd);
-					break ;
-				}
-			}
-		}
+		if (!*env)
+			new_env = mini_env(new_env, *av);
+		else
+			new_env = ft_tabcopy(new_env, env);
+		minishell(&new_env);
+		ft_tabfree(new_env);
 	}
-	free(new_env);
-	ft_putendl("Just run ./minishell without arguments");
+	else
+		ft_putendl("Just run ./minishell without arguments");
 	return (0);
 }

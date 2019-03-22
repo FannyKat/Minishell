@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 18:46:25 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/21 18:46:30 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/03/22 17:58:27 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ char		**realloc_env(int len, char **env)
 }
 
 int			find_pos(char *var, char **env)
-{	
+{
 	int		i;
 	char	*tmp;
 

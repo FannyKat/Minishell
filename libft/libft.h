@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 16:17:01 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/21 14:13:56 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/03/22 18:28:48 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -36,6 +36,7 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
+void				ft_tabfree(char **tab);
 char				**ft_tabcopy(char **tab_dest, char **tab);
 void				print_tab(char **tab);
 int					ft_tablen(char **tab);

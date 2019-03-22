@@ -1,29 +1,23 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tabcopy.c                                       :+:      :+:    :+:   */
+/*   ft_tabfree.c                                       :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/21 12:29:02 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/22 18:32:28 by fcatusse         ###   ########.fr       */
+/*   Created: 2019/03/22 18:26:20 by fcatusse          #+#    #+#             */
+/*   Updated: 2019/03/22 18:28:35 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-char		**ft_tabcopy(char **tab_dest, char **tab)
+void		ft_tabfree(char **tab)
 {
 	int		i;
 
 	i = -1;
-	tab_dest = malloc(sizeof(char *) * ft_tablen(tab));
 	while (tab && tab[++i])
-		if (!(tab_dest[i] = ft_strdup(tab[i])))
-		{
-			ft_tabfree(tab_dest);
-			return (NULL);
-		}
-	tab_dest[i] = 0;
-	return (tab_dest);
+		ft_strdel(&tab[i]);
+	free(tab);
 }

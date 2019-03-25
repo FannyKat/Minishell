@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 14:17:56 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/22 19:05:02 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/03/25 17:39:16 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,11 +14,11 @@
 
 void		display_prompt(void)
 {
-	char	path[100];
+	char	path[BUFF_SIZE];
 	char	*prompt;
 	int		len;
 
-	getcwd(path, 100);
+	getcwd(path, BUFF_SIZE);
 	len = ft_strlen(path) - 1;
 	prompt = NULL;
 	while (path[len--])
@@ -62,6 +62,7 @@ int			minishell(char ***new_env)
 				ft_tabfree(cmd);
 				break ;
 			}
+		ft_tabfree(cmd);
 	}
 	ft_tabfree(cmd);
 	return (0);
@@ -69,13 +70,17 @@ int			minishell(char ***new_env)
 
 char		**mini_env(char **new_env, char *pwd)
 {
-	/** TO DO HOME= **/
-	new_env = (char **)malloc(sizeof(new_env) * 5);	
+	char	*usr_name;
+
+	usr_name = get_name(pwd);
+	new_env = (char **)malloc(sizeof(new_env) * 7);	
 	new_env[0] = ft_strjoin("PWD=", getcwd(pwd, BUFF_SIZE));
 	new_env[1] = ft_strdup("PATH=/usr/bin:/bin:/usr/sbin:/sbin");
-	new_env[2] = ft_strdup("TERM=xterm-256color");
-	new_env[3] = ft_strdup("OLDPWD=/Users/fcatusse");
-	new_env[4] = NULL;
+	new_env[2] = ft_strjoin("HOME=/Users/", usr_name);
+	new_env[3] = ft_strjoin("USER=", usr_name);
+	new_env[4] = ft_strdup("TERM=xterm-256color");
+	new_env[5] = ft_strjoin("OLDPWD=/Users/", usr_name);
+	new_env[6] = NULL;
 	return (new_env);
 }
 

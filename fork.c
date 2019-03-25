@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:24:17 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/22 18:34:00 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/03/25 18:24:16 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,13 +26,13 @@ static int		run_fork(char *path, char **av, char **env)
 	}
 	else if (pid < 0)
 	{
-		free(path);
+		ft_strdel(&path);
 		ft_putendl_fd("Fork failed to create process", 2);
 		return (-1);
 	}
 	else if (pid > 0)
 		wait(&pid);
-	free(path);
+	ft_strdel(&path);
 	return (1);
 }
 
@@ -41,7 +41,7 @@ static int		check_builtins(char **cmd, char ***env)
 	if (!ft_strcmp(cmd[0], "exit"))
 		return (-1);
 	else if (!ft_strcmp(cmd[0], "echo"))
-		return (echo_builtin(cmd + 1));
+		return (echo_builtin(cmd + 1, env));
 	else if (!ft_strcmp(cmd[0], "setenv"))
 		return (setenv_builtin(cmd + 1, env));	
 	else if (!ft_strcmp(cmd[0], "unsetenv"))
@@ -84,15 +84,18 @@ static int		find_builtin(char **cmd, char **env)
 	char		**path;
 	char		*abs_path;
 	int			i;
+	char		*tmp;
 
 	i = -1;
 	path = walking_path(env, "PATH");
 	while (path && path[++i])
 	{
 		abs_path = ft_strjoin(path[i], "/");
-		abs_path = ft_strjoin(abs_path, cmd[0]);
+		tmp = ft_strjoin(abs_path, cmd[0]);
+		ft_strdel(&abs_path);
+		abs_path = tmp;
 		if (lstat(abs_path, &fd) == -1)
-			free(abs_path);
+			ft_strdel(&abs_path);
 		else
 			return (run_fork(abs_path, cmd, env));
 	}

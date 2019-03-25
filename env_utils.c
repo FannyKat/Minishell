@@ -6,29 +6,31 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 18:46:25 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/22 17:58:27 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/03/25 17:25:20 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char		**realloc_env(int len, char **env)
+char		*manage_opt(char **path, char ***env)
 {
-	int		i;
-	char	**new;
-
-	/** MALLOC ERROR ALLOC +1**/
-	i = -1;
-	new = (char **)malloc(sizeof(char *) * (len + 1));	
-	while (env && env[++i])
+	if (*path && !ft_strncmp(*path, "$", 1))
 	{
-		new[i] = ft_strdup(env[i]);
-		free(env[i]);
+		path[0] = get_value(*path, *env);
+		path[1] = NULL;
 	}
-	while (i < len + 1)
-		new[i++] = NULL;	
-	free(env);
-	return (new);
+	else if (*path == NULL || !ft_strcmp(*path, "~"))
+	{
+		//path = ft_memalloc(BUFF_SIZE);
+		path[0] = ft_strdup(get_value("$HOME", *env));
+		path[1] = NULL;
+	}
+	else if (!ft_strcmp(*path, "-"))
+	{
+		path[0] = ft_strdup(get_value("$OLDPWD", *env));
+		path[1] = NULL;
+	}
+	return (*path);	
 }
 
 int			find_pos(char *var, char **env)
@@ -50,6 +52,21 @@ int			find_pos(char *var, char **env)
 	return (i);
 }
 
+char			*get_value(char *var, char **env)
+{
+	char		*value;
+	int			pos;
+	
+	pos = find_pos(var + 1, env);
+	value = NULL;
+	if (env[pos])
+	{
+		value = ft_strchr(env[pos], '=');
+		value++;
+	}
+	return (value);
+}
+
 char			**setenv_var(char *var, char **env, char *value)
 {
 	int			i;
@@ -69,7 +86,7 @@ char			**setenv_var(char *var, char **env, char *value)
 	}
 	else
 	{
-		env = realloc_env(len, env);
+		env = realloc_tab(env, len);
 		if (value)
 			env[i] = ft_strjoin(var, tmp);
 		else

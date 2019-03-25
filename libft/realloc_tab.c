@@ -1,25 +1,27 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   ft_tabfree.c                                       :+:      :+:    :+:   */
+/*   realloc_tab.c                                      :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2019/03/22 18:26:20 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/25 18:20:46 by fcatusse         ###   ########.fr       */
+/*   Created: 2019/03/25 13:45:15 by fcatusse          #+#    #+#             */
+/*   Updated: 2019/03/25 13:50:49 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void		ft_tabfree(char **tab)
+char		**realloc_tab(char **tab, int len)
 {
 	int		i;
+	char	**new;
 
 	i = -1;
-	if (!tab)
-		return ;
+	new = (char **)malloc(sizeof(*new) * (len + 1));
 	while (tab && tab[++i])
-		ft_strdel(&tab[i]);
-	free(tab);
+		new[i] = ft_strdup(tab[i]);
+	new[i + 1] = 0;
+	ft_tabfree(tab);
+	return (tab);
 }

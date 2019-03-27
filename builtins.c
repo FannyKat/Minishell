@@ -12,61 +12,44 @@
 
 #include "minishell.h"
 
-void			get_path(char **path, char ***env, int num)
+int			cd_builtin(char **path, char ***env)
 {
+	char		*buff[BUFF_SIZE + 1];
 	char		*pwd;
-	char		*old_pwd;
-	char		**old_path;
 
-	if (num == 1)
-	{
-		old_path = malloc(sizeof(char *) * BUFF_SIZE);
-		*old_path = NULL;
-		old_pwd = ft_strjoin("OLDPWD=", getcwd(*old_path, BUFF_SIZE));
-		*old_path = ft_strdup(old_pwd);
-		setenv_builtin(old_path, env);
-		free(old_pwd);
-		free(*old_path);
-	}
-	if (num == 2)
-	{
-		pwd = ft_strjoin("PWD=", getcwd(*path, BUFF_SIZE));		
-		*path = ft_strdup(pwd);
-		setenv_builtin(path, env);
-		free(pwd);
-		free(*path);
-	}
-}
-
-int				cd_builtin(char **path, char ***env)
-{
-	struct stat	fd;
-
+	if (path[1])
+		return (error(3));
 	*path = manage_opt(path, env);
-	get_path(path, env, 1);
-	if (chdir(*path) == -1)
+	pwd = getcwd(*buff, BUFF_SIZE);
+	if (!pwd)
+		pwd = ft_strdup("/home/fanny");
+	if (chdir(*path) == 0)
 	{
-		lstat(*path, &fd);
-		if (fd.st_mode & S_IRUSR || fd.st_mode & S_IWUSR
-			|| fd.st_mode & S_IRGRP || fd.st_mode & S_IWGRP
-			|| fd.st_mode & S_IROTH || fd.st_mode & S_IWOTH)
+		setenv_var("OLDPWD", *env, ft_strjoin("=", pwd));
+		ft_strdel(&pwd);
+		pwd = getcwd(*buff, BUFF_SIZE);
+		setenv_var("PWD", *env, ft_strjoin("=", pwd));
+		ft_strdel(&pwd);
+	}
+	else if (chdir(*path) == -1)
+	{
+		if (access(*path, F_OK) == -1)
+			my_printf("cd: %s: No such file or directory\n", *path);
+		else if (access(*path, R_OK) == -1 || access(*path, X_OK) == -1)
 			my_printf("cd: %s: Permission Denied\n", *path);
-		else
-			my_printf("cd: Not a directory: %s\n", *path);
-	//	ft_tabfree(path);
+		else	
+			my_printf("cd: %s: Not a directory\n", *path);
 		return (-1);
 	}
-	else
-		get_path(path, env, 2);
 	return (1);
 }
 
-int				unsetenv_builtin(char **cmd, char ***env)
+int			unsetenv_builtin(char **cmd, char ***env)
 {
 	char		*var;
-	int			i;
-	int			j;
-	int			pos;
+	int		i;
+	int		j;
+	int		pos;
 
 	if (!cmd[0] || cmd[1])
 		return (error(1));
@@ -80,18 +63,18 @@ int				unsetenv_builtin(char **cmd, char ***env)
 			return (error(2));
 		var = ft_strndup(cmd[i], j);
 		pos = find_pos(var, *env);
-		if (env[pos])
+		if ((pos + 1) != ft_tablen(*env) && env[pos])
 			*env = remove_var(pos, *env);
 	}
 	return (1);
 }
 
-int				setenv_builtin(char **cmd, char ***env)
+int			setenv_builtin(char **cmd, char ***env)
 {
 	char		*var;
 	char		*value;
-	int			i;
-	int			j;
+	int		i;
+	int		j;
 
 	i = -1;
 	if (!cmd[0] || cmd[1])
@@ -111,11 +94,11 @@ int				setenv_builtin(char **cmd, char ***env)
 	return (1);
 }
 
-int				echo_builtin(char **cmd, char ***env)
+int			echo_builtin(char **cmd, char ***env)
 {
-	int			i;
-	int			j;
-	int			flag;
+	int		i;
+	int		j;
+	int		flag;
 
 	flag = 0;
 	if (!cmd[0])

@@ -32,7 +32,8 @@ static int		run_fork(char *path, char **av, char **env)
 	}
 	else if (pid > 0)
 		wait(&pid);
-	ft_strdel(&path);
+	if (path)
+		ft_strdel(&path);
 	return (1);
 }
 
@@ -64,7 +65,7 @@ char			**walking_path(char **env, char *str)
 
 	tab = NULL;
 	i = -1;
-	while (env[++i])
+	while (env && env[++i])
 	{
 		len = 0;
 		while (env[i][len] && env[i][len] != '=')

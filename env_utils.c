@@ -21,7 +21,6 @@ char		*manage_opt(char **path, char ***env)
 	}
 	else if (*path == NULL || !ft_strcmp(*path, "~"))
 	{
-		//path = ft_memalloc(BUFF_SIZE);
 		path[0] = ft_strdup(get_value("$HOME", *env));
 		path[1] = NULL;
 	}
@@ -33,9 +32,9 @@ char		*manage_opt(char **path, char ***env)
 	return (*path);	
 }
 
-int			find_pos(char *var, char **env)
+int		find_pos(char *var, char **env)
 {
-	int		i;
+	int	i;
 	char	*tmp;
 
 	i = -1;
@@ -52,10 +51,10 @@ int			find_pos(char *var, char **env)
 	return (i);
 }
 
-char			*get_value(char *var, char **env)
+char		*get_value(char *var, char **env)
 {
-	char		*value;
-	int			pos;
+	char	*value;
+	int	pos;
 	
 	pos = find_pos(var + 1, env);
 	value = NULL;
@@ -67,11 +66,11 @@ char			*get_value(char *var, char **env)
 	return (value);
 }
 
-char			**setenv_var(char *var, char **env, char *value)
+char		**setenv_var(char *var, char **env, char *value)
 {
-	int			i;
-	int			len;
-	char		*tmp;
+	int	i;
+	int	len;
+	char	*tmp;
 
 	i = find_pos(var, env);
 	len = ft_tablen(env);
@@ -96,15 +95,15 @@ char			**setenv_var(char *var, char **env, char *value)
 	return (env);
 }
 
-char			**remove_var(int pos, char **env)
+char		**remove_var(int pos, char **env)
 {
-	int			i;
-	int			count;
+	int	i;
+	int	count;
 
 	free(env[pos]);
 	env[pos] = NULL;
-	count = 0;
 	i = pos;
+	count = pos + 1;
 	while (env[i + 1])
 	{
 		env[i] = ft_strdup(env[i + 1]);	
@@ -112,6 +111,6 @@ char			**remove_var(int pos, char **env)
 		i++;
 		count++;
 	}
-	env[i] = 0;
+	env = realloc_tab(env, count - 1);
 	return (env);
 }

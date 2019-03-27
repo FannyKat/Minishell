@@ -62,7 +62,6 @@ int			minishell(char ***new_env)
 				ft_tabfree(cmd);
 				break ;
 			}
-		ft_tabfree(cmd);
 	}
 	ft_tabfree(cmd);
 	return (0);

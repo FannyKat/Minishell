@@ -14,7 +14,7 @@
 
 char			*get_name(char *name)
 {
-	struct stat		fd;
+	struct stat	fd;
 	struct passwd	*getuid;
 
 	lstat(name, &fd);
@@ -23,24 +23,29 @@ char			*get_name(char *name)
 	return (name);
 }
 
-int				error(int num)
+int			error(int num)
 {
 	if (num == 1)
 	{
-		ft_putendl("usage : setenv [ VAR=VALUE ]");
+		ft_putendl_fd("usage : setenv [ VAR=VALUE ]", 2);
 		return (-1);
 	}
 	if (num == 2)
 	{
-		ft_putendl("usage : unsetenv [ VAR=VALUE ]");
+		ft_putendl_fd("usage : unsetenv [ VAR=VALUE ]", 2);
+		return (-1);
+	}
+	if (num == 3)
+	{
+		ft_putendl_fd("cd: too many arguments", 2);
 		return (-1);
 	}
 	return (0);
 }
 
-int				exit_shell(char *input)
+int			exit_shell(char *input)
 {
-	int			i;
+	int		i;
 
 	i = -1;
 	while (input && input[++i] && ft_isspace(input[i]))

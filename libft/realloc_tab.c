@@ -15,12 +15,23 @@
 char		**realloc_tab(char **tab, int len)
 {
 	int		i;
-	char	**new;
+	int		j;
+	char		**new;
 
 	i = -1;
-	new = (char **)malloc(sizeof(*new) * (len + 1));
-	while (tab && tab[++i] && i < len)
-		new[i] = ft_strdup(tab[i]);
+	j = -1;
+	if(!(new = (char **)malloc(sizeof(*new) * (len + 1))))
+		return (tab);
+	while (tab && tab[++i])
+	{
+		if(!(new[++j] = ft_strdup(tab[i])))
+		{
+			ft_tabfree(new);
+			return (tab);
+		}
+	}
+	while (j++ < len + 1)
+		new[j] = NULL;
 	ft_tabfree(tab);
 	return (new);
 }

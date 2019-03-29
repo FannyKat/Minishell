@@ -21,5 +21,5 @@ int			ft_tablen(char **tab)
 	count = 0;
 	while (tab[++i])
 		count++;
-	return (count + 1);
+	return (count);
 }

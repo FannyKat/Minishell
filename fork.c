@@ -60,8 +60,8 @@ static int		check_builtins(char **cmd, char ***env)
 char			**walking_path(char **env, char *str)
 {
 	char		**tab;
-	int			i;
-	int			len;
+	int		i;
+	int		len;
 
 	tab = NULL;
 	i = -1;
@@ -84,7 +84,7 @@ static int		find_builtin(char **cmd, char **env)
 	struct stat	fd;
 	char		**path;
 	char		*abs_path;
-	int			i;
+	int		i;
 	char		*tmp;
 
 	i = -1;
@@ -98,12 +98,16 @@ static int		find_builtin(char **cmd, char **env)
 		if (lstat(abs_path, &fd) == -1)
 			ft_strdel(&abs_path);
 		else
+		{
+			ft_tabfree(path);
 			return (run_fork(abs_path, cmd, env));
+		}
 	}
+	ft_tabfree(path);
 	return (0);
 }
 
-int				exec_cmd(char **cmd, char ***env)
+int			exec_cmd(char **cmd, char ***env)
 {
 	struct stat	fd;
 	

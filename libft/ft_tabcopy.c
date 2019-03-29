@@ -17,7 +17,8 @@ char		**ft_tabcopy(char **tab_dest, char **tab)
 	int		i;
 
 	i = -1;
-	tab_dest = malloc(sizeof(char *) * ft_tablen(tab));
+	if (!(tab_dest = malloc(sizeof(char *) * (ft_tablen(tab) + 1))))
+		return (NULL);
 	while (tab && tab[++i])
 		if (!(tab_dest[i] = ft_strdup(tab[i])))
 		{

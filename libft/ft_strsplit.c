@@ -51,7 +51,7 @@ static int		ft_wordslen(const char *s, char c)
 char			**ft_strsplit(char const *s, char c)
 {
 	int		count;
-	char	**tab;
+	char		**tab;
 	int		i;
 
 	i = 0;
@@ -65,7 +65,10 @@ char			**ft_strsplit(char const *s, char c)
 		while (*s && *s == c)
 			s++;
 		if (!(tab[i] = ft_strsub(s, 0, ft_wordslen(s, c))))
+		{
+			ft_tabfree(tab);
 			return (NULL);
+		}
 		s += ft_wordslen(s, c);
 		i++;
 	}

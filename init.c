@@ -16,7 +16,7 @@ void		display_prompt(void)
 {
 	char	path[BUFF_SIZE];
 	char	*prompt;
-	int		len;
+	int	len;
 
 	getcwd(path, BUFF_SIZE);
 	len = ft_strlen(path) - 1;
@@ -35,25 +35,24 @@ void		display_prompt(void)
 		}
 	}
 	my_printf("\033[38;5;177m[%s]\033[0m ", prompt);
-	free(prompt);
+	ft_strdel(&prompt);
 }
 
-int			minishell(char ***new_env)
+int		minishell(char ***new_env, char **cmd, char *input)
 {
-	char	*input;
-	char	**cmd;
-
 	while (1)
 	{
 		display_prompt();
 		signal(SIGINT, signal_handler);
-		if (get_next_line(0, &input) <= 0)
+		if (get_next_line(0, &input) < 1)
 			return (0);
 		if (exit_shell(input))
 		{
+			ft_tabfree(cmd);
 			ft_strdel(&input);
 			return (0);
 		}
+		ft_tabfree(cmd);
 		cmd = ft_split(input);
 		ft_strdel(&input);
 		if (*cmd)
@@ -71,7 +70,7 @@ char		**mini_env(char **new_env, char *pwd)
 {
 	char	*usr_name;
 
-	usr_name = get_name(pwd);
+	usr_name = get_name();
 	new_env = (char **)malloc(sizeof(new_env) * 7);	
 	new_env[0] = ft_strjoin("PWD=", getcwd(pwd, BUFF_SIZE));
 	new_env[1] = ft_strdup("PATH=/usr/bin:/bin:/usr/sbin:/sbin");
@@ -83,11 +82,15 @@ char		**mini_env(char **new_env, char *pwd)
 	return (new_env);
 }
 
-int			main(int ac, char **av, char **env)
+int		main(int ac, char **av, char **env)
 {
 	char	**new_env;
+	char	**cmd;
+	char	*input;
 
+	cmd = NULL;
 	new_env = NULL;
+	input = NULL;
 	if (!isatty(0))
 		return (0);
 	if (ac == 1 && !av[1])
@@ -96,7 +99,7 @@ int			main(int ac, char **av, char **env)
 			new_env = mini_env(new_env, *av);
 		else
 			new_env = ft_tabcopy(new_env, env);
-		minishell(&new_env);
+		minishell(&new_env, cmd, input);
 		ft_tabfree(new_env);
 	}
 	else

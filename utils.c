@@ -12,15 +12,18 @@
 
 #include "minishell.h"
 
-char			*get_name(char *name)
+char			*get_name(void)
 {
-	struct stat	fd;
-	struct passwd	*getuid;
+	//struct stat	fd;
+	struct passwd	*pw;
+	uid_t		uid;
 
-	lstat(name, &fd);
-	getuid = getpwuid(fd.st_uid);
-	name = ft_strdup(getuid->pw_name);
-	return (name);
+	//lstat(name, &fd);
+	//getuid = getpwuid(fd.st_uid);
+	//name = ft_strdup(getuid->pw_name);
+	uid = getuid();
+	pw = getpwuid(uid);
+	return (pw->pw_name);
 }
 
 int			error(int num)

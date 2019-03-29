@@ -17,6 +17,6 @@ void		print_tab(char **tab)
 	int		i;
 
 	i = -1;
-	while (tab[++i])
+	while (tab && tab[++i])
 		my_printf("%s\n", tab[i]);
 }

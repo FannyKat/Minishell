@@ -55,7 +55,7 @@ char		*get_value(char *var, char **env)
 {
 	char	*value;
 	int	pos;
-	
+
 	pos = find_pos(var + 1, env);
 	value = NULL;
 	if (env[pos])
@@ -71,10 +71,10 @@ char		**setenv_var(char *var, char **env, char *value)
 	int	i;
 	int	len;
 	char	*tmp;
-
+	
 	i = find_pos(var, env);
 	len = ft_tablen(env);
-	tmp = ft_strdup(value);		
+	tmp = ft_strdup(value);
 	if (env[i])
 	{
 		ft_strdel(&env[i]);
@@ -98,19 +98,16 @@ char		**setenv_var(char *var, char **env, char *value)
 char		**remove_var(int pos, char **env)
 {
 	int	i;
-	int	count;
 
 	free(env[pos]);
-	env[pos] = NULL;
 	i = pos;
-	count = pos + 1;
 	while (env[i + 1])
 	{
 		env[i] = ft_strdup(env[i + 1]);	
 		free(env[i + 1]);
 		i++;
-		count++;
 	}
-	env = realloc_tab(env, count - 1);
+	env[i] = NULL;
+	env = realloc_tab(env, i - 1);
 	return (env);
 }

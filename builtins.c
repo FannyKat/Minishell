@@ -12,24 +12,15 @@
 
 #include "minishell.h"
 
-int			cd_builtin(char **path, char ***env)
+int			change_dir(char **env, char **path, char *buff, char *pwd)
 {
-	char		*buff[BUFF_SIZE + 1];
-	char		*pwd;
-
-	if (path[1])
-		return (error(3));
-	*path = manage_opt(path, env);
-	pwd = getcwd(*buff, BUFF_SIZE);
-	if (!pwd)
-		pwd = ft_strdup("/home/fanny");
 	if (chdir(*path) == 0)
 	{
-		setenv_var("OLDPWD", *env, ft_strjoin("=", pwd));
+		setenv_var("OLDPWD", env, ft_strjoin("=", pwd));
 		ft_strdel(&pwd);
-		pwd = getcwd(*buff, BUFF_SIZE);
-		setenv_var("PWD", *env, ft_strjoin("=", pwd));
-		ft_strdel(&pwd);
+		if (!(pwd = getcwd(buff, BUFF_SIZE)))
+			pwd = ft_strjoin("/home/", get_name());
+		env = setenv_var("PWD", env, ft_strjoin("=", pwd));
 	}
 	else if (chdir(*path) == -1)
 	{
@@ -39,9 +30,27 @@ int			cd_builtin(char **path, char ***env)
 			my_printf("cd: %s: Permission Denied\n", *path);
 		else	
 			my_printf("cd: %s: Not a directory\n", *path);
+		ft_strdel(&pwd);
 		return (-1);
 	}
+	ft_strdel(&pwd);
 	return (1);
+}
+
+int			cd_builtin(char **path, char ***env)
+{
+	char		*buff[BUFF_SIZE];
+	char		*pwd;
+
+	pwd = NULL;
+	*buff = NULL;
+	if (path[1])
+		return (error(3));
+	*path = manage_opt(path, env);
+	pwd = getcwd(*buff, BUFF_SIZE);
+	if (!pwd)
+		pwd = ft_strjoin("/home/", get_name());
+	return (change_dir(*env, path, *buff, pwd));
 }
 
 int			unsetenv_builtin(char **cmd, char ***env)
@@ -63,7 +72,8 @@ int			unsetenv_builtin(char **cmd, char ***env)
 			return (error(2));
 		var = ft_strndup(cmd[i], j);
 		pos = find_pos(var, *env);
-		if ((pos + 1) != ft_tablen(*env) && env[pos])
+		ft_strdel(&var);
+		if (pos != ft_tablen(*env))
 			*env = remove_var(pos, *env);
 	}
 	return (1);

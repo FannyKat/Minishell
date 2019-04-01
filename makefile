@@ -13,7 +13,7 @@ CFLAGS	+=	-Wall -Wextra -Werror
 PINK	=	\033[35;5;108m
 PURPLE	=	\033[38;5;141m
 MAGENTA	=	\033[38;5;177m
-END	=	\033[0m
+END		=	\033[0m
 
 $(NAME):	lib $(OBJ)
 	$(CC) $(CFLAGS) ${SRC} ./libft/libft.a -o $(NAME)

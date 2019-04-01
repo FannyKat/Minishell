@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:24:17 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/25 18:24:16 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/01 17:20:47 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -60,8 +60,8 @@ static int		check_builtins(char **cmd, char ***env)
 char			**walking_path(char **env, char *str)
 {
 	char		**tab;
-	int		i;
-	int		len;
+	int			i;
+	int			len;
 
 	tab = NULL;
 	i = -1;
@@ -84,7 +84,7 @@ static int		find_builtin(char **cmd, char **env)
 	struct stat	fd;
 	char		**path;
 	char		*abs_path;
-	int		i;
+	int			i;
 	char		*tmp;
 
 	i = -1;
@@ -107,7 +107,7 @@ static int		find_builtin(char **cmd, char **env)
 	return (0);
 }
 
-int			exec_cmd(char **cmd, char ***env)
+int				exec_cmd(char **cmd, char ***env)
 {
 	struct stat	fd;
 	
@@ -117,7 +117,9 @@ int			exec_cmd(char **cmd, char ***env)
 		return (-1);
 	if (lstat(cmd[0], &fd) != -1)
 	{
-		if (fd.st_mode & S_IXUSR)
+		if (fd.st_mode & S_IFDIR)
+			cd_builtin(cmd, env);
+		else if (fd.st_mode & S_IXUSR)
 			return (run_fork(ft_strdup(cmd[0]), cmd, *env));
 	}
 	else

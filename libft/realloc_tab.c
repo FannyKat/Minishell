@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/25 13:45:15 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/25 13:50:49 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/01 12:03:13 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -16,11 +16,11 @@ char		**realloc_tab(char **tab, int len)
 {
 	int		i;
 	int		j;
-	char		**new;
+	char	**new;
 
 	i = -1;
 	j = -1;
-	if(!(new = (char **)malloc(sizeof(*new) * (len + 1))))
+	if (!(new = (char **)malloc(sizeof(*new) * (len + 1))))
 		return (tab);
 	while (tab && tab[++i])
 	{
@@ -30,7 +30,7 @@ char		**realloc_tab(char **tab, int len)
 			return (tab);
 		}
 	}
-	while (j++ < len + 1)
+	while (j++ < len)
 		new[j] = NULL;
 	ft_tabfree(tab);
 	return (new);

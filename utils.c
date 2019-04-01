@@ -6,27 +6,23 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:22:52 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/25 11:32:09 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/01 14:31:54 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char			*get_name(void)
+char				*get_name(void)
 {
-	//struct stat	fd;
-	struct passwd	*pw;
-	uid_t		uid;
+	struct passwd	*pwd;
+	uid_t			uid;
 
-	//lstat(name, &fd);
-	//getuid = getpwuid(fd.st_uid);
-	//name = ft_strdup(getuid->pw_name);
 	uid = getuid();
-	pw = getpwuid(uid);
-	return (pw->pw_name);
+	pwd = getpwuid(uid);
+	return (pwd->pw_name);
 }
 
-int			error(int num)
+int					error(int num)
 {
 	if (num == 1)
 	{
@@ -46,9 +42,9 @@ int			error(int num)
 	return (0);
 }
 
-int			exit_shell(char *input)
+int				exit_shell(char *input)
 {
-	int		i;
+	int			i;
 
 	i = -1;
 	while (input && input[++i] && ft_isspace(input[i]))

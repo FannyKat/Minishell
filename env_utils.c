@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 18:46:25 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/25 17:25:20 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/01 17:29:58 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,9 +32,9 @@ char		*manage_opt(char **path, char ***env)
 	return (*path);	
 }
 
-int		find_pos(char *var, char **env)
+int			find_pos(char *var, char **env)
 {
-	int	i;
+	int		i;
 	char	*tmp;
 
 	i = -1;
@@ -54,7 +54,7 @@ int		find_pos(char *var, char **env)
 char		*get_value(char *var, char **env)
 {
 	char	*value;
-	int	pos;
+	int		pos;
 
 	pos = find_pos(var + 1, env);
 	value = NULL;
@@ -63,13 +63,14 @@ char		*get_value(char *var, char **env)
 		value = ft_strchr(env[pos], '=');
 		value++;
 	}
+	ft_strdel(&var);
 	return (value);
 }
 
 char		**setenv_var(char *var, char **env, char *value)
 {
-	int	i;
-	int	len;
+	int		i;
+	int		len;
 	char	*tmp;
 	
 	i = find_pos(var, env);
@@ -85,7 +86,7 @@ char		**setenv_var(char *var, char **env, char *value)
 	}
 	else
 	{
-		env = realloc_tab(env, len);
+		env = realloc_tab(env, len + 1);
 		if (value)
 			env[i] = ft_strjoin(var, tmp);
 		else
@@ -97,7 +98,7 @@ char		**setenv_var(char *var, char **env, char *value)
 
 char		**remove_var(int pos, char **env)
 {
-	int	i;
+	int		i;
 
 	free(env[pos]);
 	i = pos;
@@ -108,6 +109,6 @@ char		**remove_var(int pos, char **env)
 		i++;
 	}
 	env[i] = NULL;
-	env = realloc_tab(env, i - 1);
+	env = realloc_tab(env, i);
 	return (env);
 }

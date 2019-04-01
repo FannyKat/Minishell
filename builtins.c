@@ -6,21 +6,27 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:21:02 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/25 17:25:09 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/01 14:51:00 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-int			change_dir(char **env, char **path, char *buff, char *pwd)
+int				change_dir(char **env, char **path, char *buff, char *pwd)
 {
+	char		*value;
+
 	if (chdir(*path) == 0)
 	{
-		setenv_var("OLDPWD", env, ft_strjoin("=", pwd));
+		value = ft_strjoin("=", pwd);
+		setenv_var("OLDPWD", env, value);
+		ft_strdel(&value);
 		ft_strdel(&pwd);
 		if (!(pwd = getcwd(buff, BUFF_SIZE)))
 			pwd = ft_strjoin("/home/", get_name());
-		env = setenv_var("PWD", env, ft_strjoin("=", pwd));
+		value = ft_strjoin("=", pwd);
+		env = setenv_var("PWD", env, value);
+		ft_strdel(&value);
 	}
 	else if (chdir(*path) == -1)
 	{
@@ -28,16 +34,17 @@ int			change_dir(char **env, char **path, char *buff, char *pwd)
 			my_printf("cd: %s: No such file or directory\n", *path);
 		else if (access(*path, R_OK) == -1 || access(*path, X_OK) == -1)
 			my_printf("cd: %s: Permission Denied\n", *path);
-		else	
+		else
 			my_printf("cd: %s: Not a directory\n", *path);
 		ft_strdel(&pwd);
 		return (-1);
 	}
+	ft_strdel(&buff);
 	ft_strdel(&pwd);
 	return (1);
 }
 
-int			cd_builtin(char **path, char ***env)
+int				cd_builtin(char **path, char ***env)
 {
 	char		*buff[BUFF_SIZE];
 	char		*pwd;
@@ -53,12 +60,12 @@ int			cd_builtin(char **path, char ***env)
 	return (change_dir(*env, path, *buff, pwd));
 }
 
-int			unsetenv_builtin(char **cmd, char ***env)
+int				unsetenv_builtin(char **cmd, char ***env)
 {
 	char		*var;
-	int		i;
-	int		j;
-	int		pos;
+	int			i;
+	int			j;
+	int			pos;
 
 	if (!cmd[0] || cmd[1])
 		return (error(1));
@@ -79,12 +86,12 @@ int			unsetenv_builtin(char **cmd, char ***env)
 	return (1);
 }
 
-int			setenv_builtin(char **cmd, char ***env)
+int				setenv_builtin(char **cmd, char ***env)
 {
 	char		*var;
 	char		*value;
-	int		i;
-	int		j;
+	int			i;
+	int			j;
 
 	i = -1;
 	if (!cmd[0] || cmd[1])
@@ -104,11 +111,11 @@ int			setenv_builtin(char **cmd, char ***env)
 	return (1);
 }
 
-int			echo_builtin(char **cmd, char ***env)
+int				echo_builtin(char **cmd, char ***env)
 {
-	int		i;
-	int		j;
-	int		flag;
+	int			i;
+	int			j;
+	int			flag;
 
 	flag = 0;
 	if (!cmd[0])

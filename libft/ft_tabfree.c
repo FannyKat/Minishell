@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/22 18:26:20 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/25 18:20:46 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/02 16:10:15 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,14 @@
 
 void		ft_tabfree(char **tab)
 {
-	int	i;
+	int		i;
 
 	i = -1;
-	if (!tab)
-		return ;
-	while (tab && tab[++i])
-		ft_strdel(&tab[i]);
-	free(tab);
+	if (tab)
+	{
+		while (tab[++i])
+			ft_strdel(&tab[i]);
+		free(tab);
+		tab = NULL;
+	}
 }

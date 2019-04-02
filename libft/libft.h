@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 16:17:01 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/25 13:47:28 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/02 18:08:19 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -25,26 +25,26 @@
 
 typedef struct		s_printf
 {
-	int		flag;
-	void		(*f)(va_list*);
-}			t_printf;
+	int				flag;
+	void			(*f)(va_list*);
+}					t_printf;
 
 typedef struct		s_list
 {
-	void		*content;
-	void		*data;
-	size_t		size;
+	void			*content;
+	void			*data;
+	size_t			size;
 	struct s_list	*next;
-}			t_list;
+}					t_list;
 
 char				**realloc_tab(char **tab, int len);
 void				ft_tabfree(char **tab);
 char				**ft_tabcopy(char **tab_dest, char **tab);
 void				print_tab(char **tab);
-int				ft_tablen(char **tab);
-int				ft_strstart(char *s1, char *s2);
-int				ft_isalnum(int c);
-int				ft_isalpha(int c);
+int					ft_tablen(char **tab);
+int					isstart(char *s1, char *s2);
+int					ft_isalnum(int c);
+int					ft_isalpha(int c);
 int					ft_isdigit(int c);
 void				*ft_memset(void *b, int c, size_t len);
 void				ft_memdel(void **ap);

@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:50:10 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/01 15:24:16 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/02 14:04:38 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -73,12 +73,12 @@ char		**ft_split(char *s)
 	words_count = count_words(s);
 	if (!s)
 		return (NULL);
-	if (!(tab = malloc(sizeof(char *) * (words_count + 1))))
+	if (!(tab = malloc(sizeof(tab) * (words_count + 1))))
 		return (NULL);
 	s += count_sep(s);
 	while (*s)
 	{
-		tab[i] = malloc(sizeof(char) * (count_letter(s) + 1));
+		tab[i] = malloc(sizeof(*tab) * (count_letter(s) + 1));
 		ft_strcpy_to_space(tab[i], s);
 		s += count_letter(s);
 		s += count_sep(s);

@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 18:46:25 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/01 17:29:58 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/02 18:10:29 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,22 +14,25 @@
 
 char		*manage_opt(char **path, char ***env)
 {
+	char	*value;
+
+	value = NULL;
 	if (*path && !ft_strncmp(*path, "$", 1))
 	{
-		path[0] = get_value(*path, *env);
-		path[1] = NULL;
+		ft_strdel(path);
+		*path = ft_strdup(get_value(*path, *env));
 	}
 	else if (*path == NULL || !ft_strcmp(*path, "~"))
 	{
-		path[0] = ft_strdup(get_value("$HOME", *env));
-		path[1] = NULL;
+		ft_strdel(path);
+		*path = ft_strdup(get_value("$HOME", *env));
 	}
 	else if (!ft_strcmp(*path, "-"))
 	{
-		path[0] = ft_strdup(get_value("$OLDPWD", *env));
-		path[1] = NULL;
+		ft_strdel(path);
+		*path = ft_strdup(get_value("$OLDPWD", *env));
 	}
-	return (*path);	
+	return (*path);
 }
 
 int			find_pos(char *var, char **env)
@@ -41,7 +44,7 @@ int			find_pos(char *var, char **env)
 	tmp = ft_strjoin(var, "=");
 	while (env[++i])
 	{
-		if (ft_strstart(env[i], tmp))
+		if (isstart(env[i], tmp))
 		{
 			free(tmp);
 			return (i);
@@ -63,7 +66,6 @@ char		*get_value(char *var, char **env)
 		value = ft_strchr(env[pos], '=');
 		value++;
 	}
-	ft_strdel(&var);
 	return (value);
 }
 
@@ -72,7 +74,7 @@ char		**setenv_var(char *var, char **env, char *value)
 	int		i;
 	int		len;
 	char	*tmp;
-	
+
 	i = find_pos(var, env);
 	len = ft_tablen(env);
 	tmp = ft_strdup(value);
@@ -104,7 +106,7 @@ char		**remove_var(int pos, char **env)
 	i = pos;
 	while (env[i + 1])
 	{
-		env[i] = ft_strdup(env[i + 1]);	
+		env[i] = ft_strdup(env[i + 1]);
 		free(env[i + 1]);
 		i++;
 	}

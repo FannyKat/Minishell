@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:21:02 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/01 14:51:00 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/02 18:10:41 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -51,7 +51,7 @@ int				cd_builtin(char **path, char ***env)
 
 	pwd = NULL;
 	*buff = NULL;
-	if (path[1])
+	if (path[0] && path[1])
 		return (error(3));
 	*path = manage_opt(path, env);
 	pwd = getcwd(*buff, BUFF_SIZE);

@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/25 13:45:15 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/01 12:03:13 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/02 18:06:15 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ char		**realloc_tab(char **tab, int len)
 		return (tab);
 	while (tab && tab[++i])
 	{
-		if(!(new[++j] = ft_strdup(tab[i])))
+		if (!(new[++j] = ft_strdup(tab[i])))
 		{
 			ft_tabfree(new);
 			return (tab);

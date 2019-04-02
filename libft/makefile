@@ -10,7 +10,7 @@ SRCS	=	ft_strlen.c ft_strdup.c ft_strcpy.c ft_strncpy.c ft_strcat.c ft_strncat.c
 			ft_putendl_fd.c ft_putnbr_fd.c ft_lstnew.c ft_lstdelone.c\
 			ft_lstdel.c ft_lstadd.c ft_isblank.c ft_isspace.c ft_swap.c get_next_line.c\
 			ft_xlstadd.c my_printf.c function.c ft_split.c ft_memdel.c ft_memset.c\
-			ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isdigit.c ft_strndup.c ft_strstart.c\
+			ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isdigit.c ft_strndup.c isstart.c\
 			ft_tablen.c print_tab.c ft_tabcopy.c ft_tabfree.c realloc_tab.c\
 
 INC		=	libft.h

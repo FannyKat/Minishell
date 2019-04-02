@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:24:17 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/01 17:20:47 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/02 18:09:16 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -44,9 +44,9 @@ static int		check_builtins(char **cmd, char ***env)
 	else if (!ft_strcmp(cmd[0], "echo"))
 		return (echo_builtin(cmd + 1, env));
 	else if (!ft_strcmp(cmd[0], "setenv"))
-		return (setenv_builtin(cmd + 1, env));	
+		return (setenv_builtin(cmd + 1, env));
 	else if (!ft_strcmp(cmd[0], "unsetenv"))
-		return (unsetenv_builtin(cmd + 1, env));	
+		return (unsetenv_builtin(cmd + 1, env));
 	else if (!ft_strcmp(cmd[0], "cd"))
 		return (cd_builtin(cmd + 1, env));
 	else if (!ft_strcmp(cmd[0], "env"))
@@ -109,17 +109,17 @@ static int		find_builtin(char **cmd, char **env)
 
 int				exec_cmd(char **cmd, char ***env)
 {
-	struct stat	fd;
-	
+	struct stat	buf;
+
 	if (check_builtins(cmd, env) || find_builtin(cmd, *env))
 		return (0);
 	if (check_builtins(cmd, env) == -1)
 		return (-1);
-	if (lstat(cmd[0], &fd) != -1)
+	if (lstat(cmd[0], &buf) != -1)
 	{
-		if (fd.st_mode & S_IFDIR)
+		if (buf.st_mode & S_IFDIR)
 			cd_builtin(cmd, env);
-		else if (fd.st_mode & S_IXUSR)
+		else if (buf.st_mode & S_IXUSR)
 			return (run_fork(ft_strdup(cmd[0]), cmd, *env));
 	}
 	else

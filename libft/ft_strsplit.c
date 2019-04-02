@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 16:14:47 by fcatusse          #+#    #+#             */
-/*   Updated: 2018/11/14 17:18:54 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/02 18:08:10 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,8 +14,8 @@
 
 static int		count_words(const char *s, char c)
 {
-	int		count;
-	int		word;
+	int			count;
+	int			word;
 
 	count = 0;
 	word = 0;
@@ -37,7 +37,7 @@ static int		count_words(const char *s, char c)
 
 static int		ft_wordslen(const char *s, char c)
 {
-	int		i;
+	int			i;
 
 	i = 0;
 	while (*s && *s != c)
@@ -50,9 +50,9 @@ static int		ft_wordslen(const char *s, char c)
 
 char			**ft_strsplit(char const *s, char c)
 {
-	int		count;
+	int			count;
 	char		**tab;
-	int		i;
+	int			i;
 
 	i = 0;
 	count = count_words(s, c);

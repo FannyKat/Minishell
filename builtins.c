@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:21:02 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/02 18:10:41 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/04 12:46:05 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,16 +29,7 @@ int				change_dir(char **env, char **path, char *buff, char *pwd)
 		ft_strdel(&value);
 	}
 	else if (chdir(*path) == -1)
-	{
-		if (access(*path, F_OK) == -1)
-			my_printf("cd: %s: No such file or directory\n", *path);
-		else if (access(*path, R_OK) == -1 || access(*path, X_OK) == -1)
-			my_printf("cd: %s: Permission Denied\n", *path);
-		else
-			my_printf("cd: %s: Not a directory\n", *path);
-		ft_strdel(&pwd);
-		return (-1);
-	}
+		return (cd_error(path, pwd));
 	ft_strdel(&buff);
 	ft_strdel(&pwd);
 	return (1);

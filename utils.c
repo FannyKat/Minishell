@@ -6,20 +6,26 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:22:52 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/02 18:06:32 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/03 13:43:02 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char				*get_name(void)
+int					cd_error(char **path, char *pwd)
 {
-	struct passwd	*pwd;
-	uid_t			uid;
+	struct stat		buf;
 
-	uid = getuid();
-	pwd = getpwuid(uid);
-	return (pwd->pw_name);
+	lstat(*path, &buf);
+	if (access(*path, F_OK) == -1)
+		my_printf("cd: %s: No such file or directory\n", *path);
+	else if (!(buf.st_mode & S_IFDIR))
+		my_printf("cd: %s: Not a directory\n", *path);
+	else if (access(*path, R_OK) == -1 || access(*path, X_OK) == -1
+			|| access(*path, W_OK) == -1)
+		my_printf("cd: %s: Permission Denied\n", *path);
+	ft_strdel(&pwd);
+	return (-1);
 }
 
 int					error(int num)

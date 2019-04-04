@@ -6,11 +6,21 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 14:17:56 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/02 18:11:52 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/04 12:45:58 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
+
+char			*get_name(void)
+{
+	struct passwd	*pwd;
+	uid_t			uid;
+
+	uid = getuid();
+	pwd = getpwuid(uid);
+	return (pwd->pw_name);
+}
 
 void			display_prompt(void)
 {
@@ -50,8 +60,8 @@ int				minishell(char ***new_env, char **cmd, char *input)
 			return (0);
 		if (exit_shell(input))
 		{
-			ft_tabfree(cmd);
 			ft_strdel(&input);
+			ft_tabfree(cmd);
 			return (0);
 		}
 		input = manage_opt(&input, new_env);
@@ -74,14 +84,15 @@ char			**mini_env(char **new_env, char *pwd)
 	char		*usr_name;
 
 	usr_name = get_name();
-	new_env = (char **)malloc(sizeof(new_env) * 7);
+	new_env = (char **)malloc(sizeof(new_env) * 8);
 	new_env[0] = ft_strjoin("PWD=", getcwd(pwd, BUFF_SIZE));
 	new_env[1] = ft_strdup("PATH=/usr/bin:/bin:/usr/sbin:/sbin");
 	new_env[2] = ft_strjoin("HOME=/Users/", usr_name);
 	new_env[3] = ft_strjoin("USER=", usr_name);
 	new_env[4] = ft_strdup("TERM=xterm-256color");
 	new_env[5] = ft_strjoin("OLDPWD=/Users/", usr_name);
-	new_env[6] = NULL;
+	new_env[6] = ft_strdup("SHLVL=1");
+	new_env[7] = NULL;
 	return (new_env);
 }
 

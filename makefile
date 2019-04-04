@@ -1,6 +1,6 @@
 NAME 	=	minishell
 
-SRC 	=	init.c utils.c fork.c builtins.c env_utils.c\
+SRC 	=	init.c utils.c process.c builtins.c env_utils.c\
 
 INC		=	minishell.h
 
@@ -16,7 +16,7 @@ MAGENTA	=	\033[38;5;177m
 END		=	\033[0m
 
 $(NAME):	lib $(OBJ)
-	$(CC) $(CFLAGS) ${SRC} ./libft/libft.a -o $(NAME)
+	@$(CC) $(CFLAGS) ${SRC} ./libft/libft.a -o $(NAME)
 	@echo "${PINK}MINISHELL IS READY ✓${END}"
 
 all:		$(NAME)

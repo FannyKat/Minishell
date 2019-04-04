@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 14:19:11 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/02 18:08:32 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/04 11:44:27 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,6 +22,11 @@
 
 # define BUFF_SIZE 100
 
+typedef struct		t_sh
+{
+	int				lvl;
+}					s_sh;
+
 void	display_prompt(void);
 void	signal_handler(int signum);
 void	process_signal_handler(int signum);
@@ -32,6 +37,7 @@ int		setenv_builtin(char **cmd, char ***env);
 int		unsetenv_builtin(char **cmd, char ***env);
 int		cd_builtin(char **path, char ***env);
 int		error(int num);
+int		cd_error(char **path, char *pwd);
 int		exit_shell(char *input);
 int		find_pos(char *var, char **env);
 char	**realloc_env(char **env, int len);

@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 18:46:25 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/02 18:10:29 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/03 18:06:48 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,11 +19,20 @@ char		*manage_opt(char **path, char ***env)
 	value = NULL;
 	if (*path && !ft_strncmp(*path, "$", 1))
 	{
+		value = ft_strdup(*path);
 		ft_strdel(path);
-		*path = ft_strdup(get_value(*path, *env));
+		*path = ft_strdup(get_value(value, *env));
+		ft_strdel(&value);
 	}
-	else if (*path == NULL || !ft_strcmp(*path, "~"))
+	else if (*path == NULL || isstart(*path, "~"))
 	{
+		if ((value = ft_strchr(*path, '~')))
+		{
+			value++;
+			ft_strdel(path);
+			*path = ft_strjoin("/Users/", value);
+			return (*path);
+		}
 		ft_strdel(path);
 		*path = ft_strdup(get_value("$HOME", *env));
 	}

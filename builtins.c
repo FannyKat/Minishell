@@ -121,15 +121,16 @@ int				echo_builtin(char **cmd, char ***env)
 	int			flag;
 
 	flag = 0;
-	if (!cmd[0])
+	if (!cmd[0] || (!ft_strcmp(*cmd, "-n") && !cmd[1]))
 		return (1);
 	else if (cmd[0][0] == '-' && cmd[0][1] == 'n' && !cmd[0][2])
 		flag = 1;
-	*cmd = manage_opt(cmd, env);
+	!flag ? *cmd = manage_opt(cmd, env) : 0;
+	flag ? cmd += 1 : 0;
+	flag ? *cmd = manage_opt(cmd, env) : 0;
 	i = -1;
-	flag ? i++ : 0;
 	while (cmd && cmd[++i])
-	{
+	{	
 		j = -1;
 		while (cmd[i] && cmd[i][++j])
 			if (!(cmd[i][j] == '"'))
@@ -137,6 +138,6 @@ int				echo_builtin(char **cmd, char ***env)
 		if (cmd[i + 1])
 			ft_putchar(' ');
 	}
-	(flag == 0) ? ft_putchar('\n') : 0;
+	!flag ? ft_putchar('\n') : 0;	
 	return (1);
 }

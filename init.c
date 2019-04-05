@@ -12,42 +12,23 @@
 
 #include "minishell.h"
 
-char			*get_name(void)
+int				split_cmd(char **cmds, char ***env)
 {
-	struct passwd	*pwd;
-	uid_t			uid;
+	char			**cmd;
+	int			i;
+	int			ret;
 
-	uid = getuid();
-	pwd = getpwuid(uid);
-	return (pwd->pw_name);
-}
-
-void			display_prompt(void)
-{
-	char		path[BUFF_SIZE];
-	char		*prompt;
-	int			len;
-
-	getcwd(path, BUFF_SIZE);
-	len = ft_strlen(path) - 1;
-	prompt = NULL;
-	while (path[len--])
+	i = -1;
+	ret = 0;
+	while (cmds[++i])
 	{
-		if (path[len + 1] == '/')
-		{
-			prompt = ft_strdup("/");
+		cmd = ft_split(cmds[i]);
+		ret = exec_cmd(cmd, env);
+		ft_tabfree(cmd);
+		if (ret == -1)
 			break ;
-		}
-		if (path[len] == '/')
-		{
-			prompt = ft_strdup(path + len + 1);
-			break ;
-		}
 	}
-	if (!prompt)
-		prompt = ft_strdup("?");
-	my_printf("\033[38;5;177m[%s]\033[0m ", prompt);
-	ft_strdel(&prompt);
+	return (ret);
 }
 
 int				minishell(char ***new_env, char **cmd, char *input)
@@ -66,14 +47,13 @@ int				minishell(char ***new_env, char **cmd, char *input)
 		}
 		input = manage_opt(&input, new_env);
 		ft_tabfree(cmd);
-		cmd = ft_split(input);
+		cmd = ft_strsplit(input, ';');
 		ft_strdel(&input);
-		if (*cmd)
-			if (exec_cmd(cmd, new_env) == -1)
-			{
-				ft_tabfree(cmd);
-				break ;
-			}
+		if (split_cmd(cmd, new_env) == -1)
+		{
+			ft_tabfree(cmd);
+			break ;	
+		}
 	}
 	ft_tabfree(cmd);
 	return (0);

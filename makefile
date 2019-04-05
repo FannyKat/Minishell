@@ -1,19 +1,19 @@
 NAME 	=	minishell
 
-SRC 	=	init.c utils.c process.c builtins.c env_utils.c\
+SRC 	=	init.c utils.c process.c builtins.c env_utils.c prompt.c\
 
-INC		=	minishell.h
+INC	=	minishell.h
 
-OBJ		=	$(SRC:.c=.o)
+OBJ	=	$(SRC:.c=.o)
 
-CC		=	clang -I /usr/local/include
+CC	=	clang -I /usr/local/include
 
 CFLAGS	+=	-Wall -Wextra -Werror
 
 PINK	=	\033[35;5;108m
 PURPLE	=	\033[38;5;141m
 MAGENTA	=	\033[38;5;177m
-END		=	\033[0m
+END	=	\033[0m
 
 $(NAME):	lib $(OBJ)
 	@$(CC) $(CFLAGS) ${SRC} ./libft/libft.a -o $(NAME)

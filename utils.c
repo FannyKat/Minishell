@@ -40,11 +40,6 @@ int					error(int num)
 		ft_putendl_fd("usage : unsetenv [ VAR=VALUE ]", 2);
 		return (-1);
 	}
-	if (num == 3)
-	{
-		ft_putendl_fd("cd: too many arguments", 2);
-		return (-1);
-	}
 	return (0);
 }
 

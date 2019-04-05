@@ -24,22 +24,18 @@ char		*manage_opt(char **path, char ***env)
 		*path = ft_strdup(get_value(value, *env));
 		ft_strdel(&value);
 	}
-	else if (*path == NULL || isstart(*path, "~"))
+	else if (isstart(*path, "~"))
 	{
-		if ((value = ft_strchr(*path, '~')))
+		if (!ft_strcmp(*path, "~"))
 		{
-			value++;
 			ft_strdel(path);
-			*path = ft_strjoin("/Users/", value);
+			*path = ft_strdup(get_value("$HOME", *env));
 			return (*path);
-		}
+		}		
+		value = ft_strdup(ft_strchr(*path, '/'));
 		ft_strdel(path);
-		*path = ft_strdup(get_value("$HOME", *env));
-	}
-	else if (!ft_strcmp(*path, "-"))
-	{
-		ft_strdel(path);
-		*path = ft_strdup(get_value("$OLDPWD", *env));
+		*path = ft_strjoin(get_value("$HOME", *env), value);
+		ft_strdel(&value);
 	}
 	return (*path);
 }
@@ -75,6 +71,8 @@ char		*get_value(char *var, char **env)
 		value = ft_strchr(env[pos], '=');
 		value++;
 	}
+	if (!value)
+		value = "";
 	return (value);
 }
 

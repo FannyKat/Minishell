@@ -43,11 +43,23 @@ int				cd_builtin(char **path, char ***env)
 	pwd = NULL;
 	*buff = NULL;
 	if (path[0] && path[1])
-		return (error(3));
-	*path = manage_opt(path, env);
+	{
+		ft_putendl_fd("cd: too many arguments", 2);
+		return (-1);
+	}
+	if (*path == NULL)
+	{
+		ft_strdel(path);	
+		*path = ft_strdup(get_value("$HOME", *env));	
+	}
+	else if (!ft_strcmp(*path, "-"))
+	{
+		ft_strdel(path);
+		*path = ft_strdup(get_value("$OLDPWD", *env));	
+	}
+	*path ? *path = manage_opt(path, env) : 0;
 	pwd = getcwd(*buff, BUFF_SIZE);
-	if (!pwd)
-		pwd = ft_strjoin("/home/", get_name());
+	!pwd ? pwd = ft_strjoin("/home/", get_name()) : 0;
 	return (change_dir(*env, path, *buff, pwd));
 }
 
@@ -59,7 +71,7 @@ int				unsetenv_builtin(char **cmd, char ***env)
 	int			pos;
 
 	if (!cmd[0] || cmd[1])
-		return (error(1));
+		return (error(2));
 	i = -1;
 	while (cmd && cmd[++i])
 	{
@@ -111,10 +123,9 @@ int				echo_builtin(char **cmd, char ***env)
 	flag = 0;
 	if (!cmd[0])
 		return (1);
-	else if (cmd[0][0] == '-' && cmd[0][1] == 'n')
+	else if (cmd[0][0] == '-' && cmd[0][1] == 'n' && !cmd[0][2])
 		flag = 1;
-	else if (cmd[0][0] == '$')
-		*cmd = get_value(*cmd, *env);
+	*cmd = manage_opt(cmd, env);
 	i = -1;
 	flag ? i++ : 0;
 	while (cmd && cmd[++i])
@@ -126,7 +137,6 @@ int				echo_builtin(char **cmd, char ***env)
 		if (cmd[i + 1])
 			ft_putchar(' ');
 	}
-	if (flag == 0)
-		ft_putchar('\n');
+	(flag == 0) ? ft_putchar('\n') : 0;
 	return (1);
 }

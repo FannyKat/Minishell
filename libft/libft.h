@@ -52,6 +52,7 @@ void				ft_bzero(void *s1, size_t n);
 void				*ft_memcpy(void *s1, const void *s2, size_t n);
 void				*ft_memalloc(size_t size);
 size_t				ft_strlen(const char *s);
+size_t				strlen_to(const char *s, char c);
 char				*ft_strdup(const char *s1);
 char				*ft_strndup(const char *s1, int n);
 char				*ft_strcpy(char *s1, const char *s2);

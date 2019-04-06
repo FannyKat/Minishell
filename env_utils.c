@@ -12,30 +12,26 @@
 
 #include "minishell.h"
 
-char		*manage_opt(char **path, char ***env)
+char		*manage_tilde(char **path)
 {
 	char	*value;
 
 	value = NULL;
-	if (*path && !ft_strncmp(*path, "$", 1))
+	if (*path && isstart(*path, "~"))
 	{
-		value = ft_strdup(*path);
-		ft_strdel(path);
-		*path = ft_strdup(get_value(value, *env));
-		ft_strdel(&value);
-	}
-	else if (isstart(*path, "~"))
-	{
-		if (!ft_strcmp(*path, "~"))
+		if (!ft_strcmp(*path, "~") || !ft_strcmp(*path + 1, get_usr()))
 		{
 			ft_strdel(path);
-			*path = ft_strdup(get_value("$HOME", *env));
+			*path = ft_strdup(get_home());
 			return (*path);
-		}		
-		value = ft_strdup(ft_strchr(*path, '/'));
-		ft_strdel(path);
-		*path = ft_strjoin(get_value("$HOME", *env), value);
-		ft_strdel(&value);
+		}
+		if ((value = ft_strchr(*path, '/')))
+		{
+			value = ft_strdup(ft_strchr(*path, '/'));
+			ft_strdel(path);
+			*path = ft_strjoin(get_home(), value);
+			ft_strdel(&value);
+		}
 	}
 	return (*path);
 }

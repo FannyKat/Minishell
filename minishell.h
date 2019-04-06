@@ -25,8 +25,9 @@
 void	display_prompt(void);
 void	signal_handler(int signum);
 void	process_signal_handler(int signum);
-char	*get_name(void);
+char	*get_usr(void);
 char	*get_home(void);
+char	*get_shell(void);
 int		exec_cmd(char **cmd, char ***env);
 int		echo_builtin(char **cmd, char ***env);
 int		setenv_builtin(char **cmd, char ***env);
@@ -40,6 +41,7 @@ char	**realloc_env(char **env, int len);
 char	**remove_var(int pos, char **env);
 char	**setenv_var(char *var, char **env, char *value);
 char	*get_value(char *var, char **env);
-char	*manage_opt(char **path, char ***env);
+char	*manage_tilde(char **path);
+char	*manage_dollar(char *path, char **env);
 
 #endif

@@ -1,6 +1,6 @@
 #include "minishell.h"
 
-char			*get_name(void)
+char			*get_usr(void)
 {
 	struct passwd	*pwd;
 	uid_t		uid;
@@ -8,6 +8,16 @@ char			*get_name(void)
 	uid = getuid();
 	pwd = getpwuid(uid);
 	return (pwd->pw_name);
+}
+
+char			*get_shell(void)
+{
+	struct passwd	*pwd;
+	uid_t		uid;
+
+	uid = getuid();
+	pwd = getpwuid(uid);
+	return (pwd->pw_shell);
 }
 
 char			*get_home(void)

@@ -12,7 +12,7 @@
 
 #include "minishell.h"
 
-int				change_dir(char **env, char **path, char *buff, char *pwd)
+int			change_dir(char **env, char **path, char *buff, char *pwd)
 {
 	char		*value;
 
@@ -35,7 +35,7 @@ int				change_dir(char **env, char **path, char *buff, char *pwd)
 	return (1);
 }
 
-int				cd_builtin(char **path, char ***env)
+int			cd_builtin(char **path, char ***env)
 {
 	char		*buff[BUFF_SIZE];
 	char		*pwd;
@@ -50,25 +50,26 @@ int				cd_builtin(char **path, char ***env)
 	if (*path == NULL)
 	{
 		ft_strdel(path);	
-		*path = ft_strdup(get_value("$HOME", *env));	
+		*path = ft_strdup(get_home());	
 	}
 	else if (!ft_strcmp(*path, "-"))
 	{
 		ft_strdel(path);
 		*path = ft_strdup(get_value("$OLDPWD", *env));	
 	}
-	*path ? *path = manage_opt(path, env) : 0;
+	*path ? *path = manage_tilde(path) : 0;
+	*path ? *path = manage_dollar(*path, *env) : 0;
 	pwd = getcwd(*buff, BUFF_SIZE);
 	!pwd ? pwd = ft_strdup(get_home()) : 0;
 	return (change_dir(*env, path, *buff, pwd));
 }
 
-int				unsetenv_builtin(char **cmd, char ***env)
+int			unsetenv_builtin(char **cmd, char ***env)
 {
 	char		*var;
-	int			i;
-	int			j;
-	int			pos;
+	int		i;
+	int		j;
+	int		pos;
 
 	if (!cmd[0] || cmd[1])
 		return (error(2));
@@ -76,8 +77,7 @@ int				unsetenv_builtin(char **cmd, char ***env)
 	while (cmd && cmd[++i])
 	{
 		j = -1;
-		while (cmd[i][++j] && cmd[i][j] != '=')
-			;
+		j = strlen_to(cmd[i], '=');
 		if (j == (int)ft_strlen(cmd[i]))
 			return (error(2));
 		var = ft_strndup(cmd[i], j);
@@ -89,12 +89,12 @@ int				unsetenv_builtin(char **cmd, char ***env)
 	return (1);
 }
 
-int				setenv_builtin(char **cmd, char ***env)
+int			setenv_builtin(char **cmd, char ***env)
 {
 	char		*var;
 	char		*value;
-	int			i;
-	int			j;
+	int		i;
+	int		j;
 
 	i = -1;
 	if (!cmd[0] || cmd[1])
@@ -103,8 +103,7 @@ int				setenv_builtin(char **cmd, char ***env)
 	while (cmd && cmd[++i])
 	{
 		j = -1;
-		while (cmd[i][++j] && cmd[i][j] != '=')
-			;
+		j = strlen_to(cmd[i], '=');
 		if (j == (int)ft_strlen(cmd[i]))
 			return (error(1));
 		var = ft_strndup(cmd[i], j);
@@ -114,29 +113,28 @@ int				setenv_builtin(char **cmd, char ***env)
 	return (1);
 }
 
-int				echo_builtin(char **cmd, char ***env)
+int			echo_builtin(char **cmd, char ***env)
 {
-	int			i;
-	int			j;
-	int			flag;
+	int		i;
+	int		j;
+	int		flag;
 
 	flag = 0;
 	if (!cmd[0] || (!ft_strcmp(*cmd, "-n") && !cmd[1]))
 		return (1);
 	else if (cmd[0][0] == '-' && cmd[0][1] == 'n' && !cmd[0][2])
 		flag = 1;
-	!flag ? *cmd = manage_opt(cmd, env) : 0;
-	flag ? cmd += 1 : 0;
-	flag ? *cmd = manage_opt(cmd, env) : 0;
 	i = -1;
+	flag ? i++ : 0;	
 	while (cmd && cmd[++i])
-	{	
+	{
+		cmd[i] = manage_dollar(cmd[i], *env);
+		cmd[i] = manage_tilde(&cmd[i]);
 		j = -1;
 		while (cmd[i] && cmd[i][++j])
-			if (!(cmd[i][j] == '"'))
+			if (cmd[i][j] != '"')
 				write(1, &cmd[i][j], 1);
-		if (cmd[i + 1])
-			ft_putchar(' ');
+		cmd[i + 1] ? ft_putchar(' ') : 0;
 	}
 	!flag ? ft_putchar('\n') : 0;	
 	return (1);

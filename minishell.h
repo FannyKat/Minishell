@@ -22,15 +22,11 @@
 
 # define BUFF_SIZE 100
 
-typedef struct		t_sh
-{
-	int				lvl;
-}					s_sh;
-
 void	display_prompt(void);
 void	signal_handler(int signum);
 void	process_signal_handler(int signum);
 char	*get_name(void);
+char	*get_home(void);
 int		exec_cmd(char **cmd, char ***env);
 int		echo_builtin(char **cmd, char ***env);
 int		setenv_builtin(char **cmd, char ***env);

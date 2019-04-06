@@ -23,7 +23,7 @@ int				change_dir(char **env, char **path, char *buff, char *pwd)
 		ft_strdel(&value);
 		ft_strdel(&pwd);
 		if (!(pwd = getcwd(buff, BUFF_SIZE)))
-			pwd = ft_strjoin("/home/", get_name());
+			pwd = ft_strdup(get_home());
 		value = ft_strjoin("=", pwd);
 		env = setenv_var("PWD", env, value);
 		ft_strdel(&value);
@@ -59,7 +59,7 @@ int				cd_builtin(char **path, char ***env)
 	}
 	*path ? *path = manage_opt(path, env) : 0;
 	pwd = getcwd(*buff, BUFF_SIZE);
-	!pwd ? pwd = ft_strjoin("/home/", get_name()) : 0;
+	!pwd ? pwd = ft_strdup(get_home()) : 0;
 	return (change_dir(*env, path, *buff, pwd));
 }
 

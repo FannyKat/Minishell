@@ -10,6 +10,16 @@ char			*get_name(void)
 	return (pwd->pw_name);
 }
 
+char			*get_home(void)
+{
+	struct passwd	*pwd;
+	uid_t		uid;
+
+	uid = getuid();
+	pwd = getpwuid(uid);
+	return (pwd->pw_dir);
+}
+
 void			display_prompt(void)
 {
 	char		path[BUFF_SIZE];

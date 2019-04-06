@@ -61,17 +61,14 @@ int				minishell(char ***new_env, char **cmd, char *input)
 
 char			**mini_env(char **new_env, char *pwd)
 {
-	char		*usr_name;
-
-	usr_name = get_name();
 	new_env = (char **)malloc(sizeof(new_env) * 8);
 	new_env[0] = ft_strjoin("PWD=", getcwd(pwd, BUFF_SIZE));
 	new_env[1] = ft_strdup("PATH=/usr/bin:/bin:/usr/sbin:/sbin");
-	new_env[2] = ft_strjoin("HOME=/Users/", usr_name);
-	new_env[3] = ft_strjoin("USER=", usr_name);
+	new_env[2] = ft_strjoin("HOME=", get_home());
+	new_env[3] = ft_strjoin("USER=", get_name());
 	new_env[4] = ft_strdup("TERM=xterm-256color");
-	new_env[5] = ft_strjoin("OLDPWD=/Users/", usr_name);
-	new_env[6] = ft_strdup("SHLVL=1");
+	new_env[5] = ft_strdup("SHLVL=1");
+	new_env[6] = ft_strjoin("OLDPWD=", get_home());
 	new_env[7] = NULL;
 	return (new_env);
 }

@@ -17,7 +17,7 @@ char		*manage_tilde(char **path)
 	char	*value;
 
 	value = NULL;
-	if (*path && isstart(*path, "~"))
+	if (isstart(*path, "~"))
 	{
 		if (!ft_strcmp(*path, "~") || !ft_strcmp(*path + 1, get_usr()))
 		{

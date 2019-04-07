@@ -20,10 +20,10 @@ int				split_cmd(char **cmds, char ***env)
 
 	i = -1;
 	ret = 0;
-	while (cmds && cmds[++i])
+	while (cmds[++i])
 	{
 	//	cmds[i] = manage_dollar(cmds[i], *env);
-		cmds[i] = manage_tilde(cmds);
+		cmds[i] = manage_tilde(&cmds[i]);
 		cmd = ft_split(cmds[i]);
 		ret = exec_cmd(cmd, env);
 		ft_tabfree(cmd);

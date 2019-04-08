@@ -1,9 +1,21 @@
+/* ************************************************************************** */
+/*                                                                            */
+/*                                                        :::      ::::::::   */
+/*   prompt.c                                           :+:      :+:    :+:   */
+/*                                                    +:+ +:+         +:+     */
+/*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
+/*                                                +#+#+#+#+#+   +#+           */
+/*   Created: 2019/04/08 14:27:57 by fcatusse          #+#    #+#             */
+/*   Updated: 2019/04/08 14:44:55 by fcatusse         ###   ########.fr       */
+/*                                                                            */
+/* ************************************************************************** */
+
 #include "minishell.h"
 
 char			*get_usr(void)
 {
 	struct passwd	*pwd;
-	uid_t		uid;
+	uid_t			uid;
 
 	uid = getuid();
 	pwd = getpwuid(uid);
@@ -13,7 +25,7 @@ char			*get_usr(void)
 char			*get_shell(void)
 {
 	struct passwd	*pwd;
-	uid_t		uid;
+	uid_t			uid;
 
 	uid = getuid();
 	pwd = getpwuid(uid);
@@ -23,7 +35,7 @@ char			*get_shell(void)
 char			*get_home(void)
 {
 	struct passwd	*pwd;
-	uid_t		uid;
+	uid_t			uid;
 
 	uid = getuid();
 	pwd = getpwuid(uid);

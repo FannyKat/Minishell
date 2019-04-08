@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 14:17:56 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/04 12:45:58 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/08 15:03:23 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,7 +14,7 @@
 
 int				split_cmd(char **cmds, char ***env)
 {
-	char			**cmd;
+	char		**cmd;
 	int			i;
 	int			ret;
 
@@ -22,10 +22,11 @@ int				split_cmd(char **cmds, char ***env)
 	ret = 0;
 	while (cmds[++i])
 	{
-	//	cmds[i] = manage_dollar(cmds[i], *env);
-		cmds[i] = manage_tilde(&cmds[i]);
+		cmds[i] = manage_dollar(cmds[i], *env);
+		cmds[i] = manage_tilde(&cmds[i], *env);
 		cmd = ft_split(cmds[i]);
-		ret = exec_cmd(cmd, env);
+		if (*cmd)
+			ret = exec_cmd(cmd, env);
 		ft_tabfree(cmd);
 		if (ret == -1)
 			break ;
@@ -33,10 +34,10 @@ int				split_cmd(char **cmds, char ***env)
 	return (ret);
 }
 
-char				*manage_dollar(char *cmd, char **env)
+char			*manage_dollar(char *cmd, char **env)
 {
-	char			*value;
-	char			*tmp;
+	char		*value;
+	char		*tmp;
 	int			i;
 
 	i = -1;
@@ -52,11 +53,11 @@ char				*manage_dollar(char *cmd, char **env)
 			cmd = ft_strjoin(get_value(value, env), tmp);
 			ft_strdel(&value);
 			ft_strdel(&tmp);
-			return (cmd);		
+			return (cmd);
 		}
 		value = ft_strdup(cmd);
-		ft_strdel(&cmd);		
-		cmd = ft_strdup(get_value(value, env));	
+		ft_strdel(&cmd);
+		cmd = ft_strdup(get_value(value, env));
 		ft_strdel(&value);
 	}
 	return (cmd);
@@ -82,7 +83,7 @@ int				minishell(char ***new_env, char **cmd, char *input)
 		if (split_cmd(cmd, new_env) == -1)
 		{
 			ft_tabfree(cmd);
-			break ;	
+			break ;
 		}
 	}
 	ft_tabfree(cmd);

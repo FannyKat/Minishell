@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:22:52 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/03 13:43:02 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/08 14:30:28 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -55,21 +55,21 @@ int					exit_shell(char *input)
 	return (0);
 }
 
-void				process_signal_handler(int signum)
-{
-	if (signum == SIGINT)
-	{
-		ft_putstr("\n");
-		signal(SIGINT, process_signal_handler);
-	}
-}
-
 void				signal_handler(int signum)
 {
 	if (signum == SIGINT)
 	{
+		signal(SIGINT, signal_handler);
 		ft_putstr("\n");
 		display_prompt();
-		signal(SIGINT, signal_handler);
+	}
+}
+
+void				process_signal_handler(int signum)
+{
+	if (signum == SIGINT)
+	{
+		signal(SIGINT, process_signal_handler);
+		ft_putstr("\n");
 	}
 }

@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 14:19:11 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/04 11:44:27 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/08 15:03:15 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -41,7 +41,7 @@ char	**realloc_env(char **env, int len);
 char	**remove_var(int pos, char **env);
 char	**setenv_var(char *var, char **env, char *value);
 char	*get_value(char *var, char **env);
-char	*manage_tilde(char **path);
+char	*manage_tilde(char **path, char **env);
 char	*manage_dollar(char *path, char **env);
 
 #endif

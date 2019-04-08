@@ -6,30 +6,30 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 18:46:25 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/03 18:06:48 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/08 15:15:38 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char		*manage_tilde(char **path)
+char		*manage_tilde(char **path, char **env)
 {
 	char	*value;
 
 	value = NULL;
-	if (isstart(*path, "~"))
+	if (path && isstart(*path, "~"))
 	{
 		if (!ft_strcmp(*path, "~") || !ft_strcmp(*path + 1, get_usr()))
 		{
 			ft_strdel(path);
-			*path = ft_strdup(get_home());
+			*path = ft_strdup(get_value("$HOME", env));
 			return (*path);
 		}
 		if ((value = ft_strchr(*path, '/')))
 		{
 			value = ft_strdup(ft_strchr(*path, '/'));
 			ft_strdel(path);
-			*path = ft_strjoin(get_home(), value);
+			*path = ft_strjoin(get_value("$HOME", env), value);
 			ft_strdel(&value);
 		}
 	}

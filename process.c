@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 11:29:24 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/03 16:08:23 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/08 14:19:50 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -20,6 +20,11 @@ static int		run_fork(char *path, char **av, char **env)
 	signal(SIGINT, process_signal_handler);
 	if (pid == 0)
 	{
+		if (access(path, X_OK) == -1)
+		{
+			my_printf("%s: Permission Denied\n", path);
+			exit(0);
+		}
 		if (execve(path, av, env) == -1)
 			ft_putendl_fd("Not an executable", 2);
 		exit(0);
@@ -32,8 +37,7 @@ static int		run_fork(char *path, char **av, char **env)
 	}
 	else if (pid > 0)
 		wait(&pid);
-	if (path)
-		ft_strdel(&path);
+	ft_strdel(&path);
 	return (1);
 }
 
@@ -124,15 +128,14 @@ int				exec_cmd(char **cmd, char ***env)
 		return (-1);
 	if (lstat(cmd[0], &buf) != -1)
 	{
-		if (buf.st_mode & S_IFDIR)
+		if (buf.st_mode & S_IFREG)
+			my_printf("Minishell: command not found: %s\n", cmd[0]);
+		else if (buf.st_mode & S_IFDIR)
 			cd_builtin(cmd, env);
 		else if (buf.st_mode & S_IXUSR)
 			return (run_fork(ft_strdup(cmd[0]), cmd, *env));
 	}
 	else
-	{
-		ft_putstr("Minishell: command not found: ");
-		ft_putendl(cmd[0]);
-	}
+		my_printf("Minishell: command not found: %s\n", cmd[0]);
 	return (0);
 }

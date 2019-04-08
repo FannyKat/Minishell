@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:21:02 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/04 12:46:05 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/08 15:03:46 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -49,15 +49,15 @@ int			cd_builtin(char **path, char ***env)
 	}
 	if (*path == NULL)
 	{
-		ft_strdel(path);	
-		*path = ft_strdup(get_home());	
+		ft_strdel(path);
+		*path = ft_strdup(get_home());
 	}
 	else if (!ft_strcmp(*path, "-"))
 	{
 		ft_strdel(path);
-		*path = ft_strdup(get_value("$OLDPWD", *env));	
+		*path = ft_strdup(get_value("$OLDPWD", *env));
 	}
-	*path ? *path = manage_tilde(path) : 0;
+	*path ? *path = manage_tilde(path, *env) : 0;
 	*path ? *path = manage_dollar(*path, *env) : 0;
 	pwd = getcwd(*buff, BUFF_SIZE);
 	!pwd ? pwd = ft_strdup(get_home()) : 0;
@@ -66,7 +66,7 @@ int			cd_builtin(char **path, char ***env)
 
 int			unsetenv_builtin(char **cmd, char ***env)
 {
-	char		*var;
+	char	*var;
 	int		i;
 	int		j;
 	int		pos;
@@ -91,8 +91,8 @@ int			unsetenv_builtin(char **cmd, char ***env)
 
 int			setenv_builtin(char **cmd, char ***env)
 {
-	char		*var;
-	char		*value;
+	char	*var;
+	char	*value;
 	int		i;
 	int		j;
 
@@ -125,17 +125,17 @@ int			echo_builtin(char **cmd, char ***env)
 	else if (cmd[0][0] == '-' && cmd[0][1] == 'n' && !cmd[0][2])
 		flag = 1;
 	i = -1;
-	flag ? i++ : 0;	
+	flag ? i++ : 0;
 	while (cmd && cmd[++i])
 	{
 		cmd[i] = manage_dollar(cmd[i], *env);
-		cmd[i] = manage_tilde(&cmd[i]);
+		cmd[i] = manage_tilde(&cmd[i], *env);
 		j = -1;
 		while (cmd[i] && cmd[i][++j])
 			if (cmd[i][j] != '"')
 				write(1, &cmd[i][j], 1);
 		cmd[i + 1] ? ft_putchar(' ') : 0;
 	}
-	!flag ? ft_putchar('\n') : 0;	
+	!flag ? ft_putchar('\n') : 0;
 	return (1);
 }

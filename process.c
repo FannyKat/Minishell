@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 11:29:24 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/08 14:19:50 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/09 12:37:25 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,6 +100,8 @@ static int		find_builtin(char **cmd, char **env)
 
 	i = -1;
 	path = walking_path(env, "PATH");
+	if (!ft_strcmp(cmd[0], "/"))
+			return (0);
 	while (path && path[++i])
 	{
 		abs_path = ft_strjoin(path[i], "/");

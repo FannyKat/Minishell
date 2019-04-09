@@ -6,35 +6,11 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 18:46:25 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/08 15:15:38 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/09 15:20:05 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
-
-char		*manage_tilde(char **path, char **env)
-{
-	char	*value;
-
-	value = NULL;
-	if (path && isstart(*path, "~"))
-	{
-		if (!ft_strcmp(*path, "~") || !ft_strcmp(*path + 1, get_usr()))
-		{
-			ft_strdel(path);
-			*path = ft_strdup(get_value("$HOME", env));
-			return (*path);
-		}
-		if ((value = ft_strchr(*path, '/')))
-		{
-			value = ft_strdup(ft_strchr(*path, '/'));
-			ft_strdel(path);
-			*path = ft_strjoin(get_value("$HOME", env), value);
-			ft_strdel(&value);
-		}
-	}
-	return (*path);
-}
 
 int			find_pos(char *var, char **env)
 {
@@ -42,6 +18,8 @@ int			find_pos(char *var, char **env)
 	char	*tmp;
 
 	i = -1;
+	if (!ft_strncmp(var, "$", 1))
+		var++;
 	tmp = ft_strjoin(var, "=");
 	while (env[++i])
 	{

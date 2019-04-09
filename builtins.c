@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:21:02 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/08 15:03:46 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/09 17:07:16 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,7 +23,7 @@ int			change_dir(char **env, char **path, char *buff, char *pwd)
 		ft_strdel(&value);
 		ft_strdel(&pwd);
 		if (!(pwd = getcwd(buff, BUFF_SIZE)))
-			pwd = ft_strdup(get_home());
+			pwd = ft_strdup("?");
 		value = ft_strjoin("=", pwd);
 		env = setenv_var("PWD", env, value);
 		ft_strdel(&value);
@@ -50,7 +50,7 @@ int			cd_builtin(char **path, char ***env)
 	if (*path == NULL)
 	{
 		ft_strdel(path);
-		*path = ft_strdup(get_home());
+		*path = ft_strdup(get_value("$HOME", *env));
 	}
 	else if (!ft_strcmp(*path, "-"))
 	{
@@ -60,7 +60,7 @@ int			cd_builtin(char **path, char ***env)
 	*path ? *path = manage_tilde(path, *env) : 0;
 	*path ? *path = manage_dollar(*path, *env) : 0;
 	pwd = getcwd(*buff, BUFF_SIZE);
-	!pwd ? pwd = ft_strdup(get_home()) : 0;
+	!pwd ? pwd = ft_strdup(get_value("$PWD", *env)) : 0;
 	return (change_dir(*env, path, *buff, pwd));
 }
 
@@ -100,13 +100,17 @@ int			setenv_builtin(char **cmd, char ***env)
 	if (!cmd[0] || cmd[1])
 		return (error(1));
 	value = ft_strchr(*cmd, '=');
+	value = manage_dollar(value, *env);
 	while (cmd && cmd[++i])
 	{
 		j = -1;
 		j = strlen_to(cmd[i], '=');
 		if (j == (int)ft_strlen(cmd[i]))
 			return (error(1));
-		var = ft_strndup(cmd[i], j);
+		if (!ft_strncmp(cmd[i], "$", 1))
+			var = ft_strndup(&cmd[i][1], j - 1);
+		else
+			var = ft_strndup(cmd[i], j);
 	}
 	*env = setenv_var(var, *env, value);
 	free(var);

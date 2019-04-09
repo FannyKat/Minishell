@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 14:19:11 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/08 15:03:15 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/09 15:57:17 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,8 +26,6 @@ void	display_prompt(void);
 void	signal_handler(int signum);
 void	process_signal_handler(int signum);
 char	*get_usr(void);
-char	*get_home(void);
-char	*get_shell(void);
 int		exec_cmd(char **cmd, char ***env);
 int		echo_builtin(char **cmd, char ***env);
 int		setenv_builtin(char **cmd, char ***env);
@@ -41,6 +39,7 @@ char	**realloc_env(char **env, int len);
 char	**remove_var(int pos, char **env);
 char	**setenv_var(char *var, char **env, char *value);
 char	*get_value(char *var, char **env);
+char	*get_values(char *var, char **env);
 char	*manage_tilde(char **path, char **env);
 char	*manage_dollar(char *path, char **env);
 

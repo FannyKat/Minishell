@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 14:17:56 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/08 15:03:23 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/09 15:20:16 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,35 +32,6 @@ int				split_cmd(char **cmds, char ***env)
 			break ;
 	}
 	return (ret);
-}
-
-char			*manage_dollar(char *cmd, char **env)
-{
-	char		*value;
-	char		*tmp;
-	int			i;
-
-	i = -1;
-	value = NULL;
-	if (cmd && isstart(cmd, "$"))
-	{
-		if ((tmp = ft_strchr(cmd, '/')))
-		{
-			tmp = ft_strdup(tmp);
-			i = strlen_to(cmd, '/');
-			value = ft_strndup(cmd, i);
-			ft_strdel(&cmd);
-			cmd = ft_strjoin(get_value(value, env), tmp);
-			ft_strdel(&value);
-			ft_strdel(&tmp);
-			return (cmd);
-		}
-		value = ft_strdup(cmd);
-		ft_strdel(&cmd);
-		cmd = ft_strdup(get_value(value, env));
-		ft_strdel(&value);
-	}
-	return (cmd);
 }
 
 int				minishell(char ***new_env, char **cmd, char *input)
@@ -92,15 +63,20 @@ int				minishell(char ***new_env, char **cmd, char *input)
 
 char			**mini_env(char **new_env, char *pwd)
 {
+	struct passwd	*pw;
+	uid_t			uid;
+
+	uid = getuid();
+	pw = getpwuid(uid);
 	new_env = (char **)malloc(sizeof(new_env) * 9);
 	new_env[0] = ft_strjoin("PWD=", getcwd(pwd, BUFF_SIZE));
 	new_env[1] = ft_strdup("PATH=/usr/bin:/bin:/usr/sbin:/sbin");
-	new_env[2] = ft_strjoin("HOME=", get_home());
+	new_env[2] = ft_strjoin("HOME=", pw->pw_dir);
 	new_env[3] = ft_strjoin("USER=", get_usr());
 	new_env[4] = ft_strdup("TERM=xterm-256color");
-	new_env[5] = ft_strjoin("SHELL=", get_shell());
+	new_env[5] = ft_strjoin("SHELL=", pw->pw_shell);
 	new_env[6] = ft_strdup("SHLVL=1");
-	new_env[7] = ft_strjoin("OLDPWD=", get_home());
+	new_env[7] = ft_strjoin("OLDPWD=", pw->pw_dir);
 	new_env[8] = NULL;
 	return (new_env);
 }

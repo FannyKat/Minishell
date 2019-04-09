@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/08 14:27:57 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/08 14:44:55 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/09 15:16:27 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,34 +22,15 @@ char			*get_usr(void)
 	return (pwd->pw_name);
 }
 
-char			*get_shell(void)
-{
-	struct passwd	*pwd;
-	uid_t			uid;
-
-	uid = getuid();
-	pwd = getpwuid(uid);
-	return (pwd->pw_shell);
-}
-
-char			*get_home(void)
-{
-	struct passwd	*pwd;
-	uid_t			uid;
-
-	uid = getuid();
-	pwd = getpwuid(uid);
-	return (pwd->pw_dir);
-}
-
 void			display_prompt(void)
 {
 	char		path[BUFF_SIZE];
 	char		*prompt;
 	int			len;
 
-	getcwd(path, BUFF_SIZE);
-	len = ft_strlen(path) - 1;
+	len = -1;
+	if (getcwd(path, BUFF_SIZE))
+		len = ft_strlen(path) - 1;
 	prompt = NULL;
 	while (path[len--])
 	{

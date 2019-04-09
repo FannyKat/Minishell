@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 16:17:01 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/02 18:08:19 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/09 15:35:00 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -43,6 +43,7 @@ char				**ft_tabcopy(char **tab_dest, char **tab);
 void				print_tab(char **tab);
 int					ft_tablen(char **tab);
 int					isstart(char *s1, char *s2);
+int					ft_isupper(int c);
 int					ft_isalnum(int c);
 int					ft_isalpha(int c);
 int					ft_isdigit(int c);

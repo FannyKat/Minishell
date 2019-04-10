@@ -1,6 +1,6 @@
 NAME 	=	minishell
 
-SRC 	=	init.c utils.c process.c builtins.c env_utils.c prompt.c expansion.c\
+SRC 	=	init.c utils.c process.c builtins.c env_utils.c prompt.c expansions.c\
 
 INC	=	minishell.h
 

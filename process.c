@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 11:29:24 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/09 12:37:25 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/10 15:15:04 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -29,14 +29,14 @@ static int		run_fork(char *path, char **av, char **env)
 			ft_putendl_fd("Not an executable", 2);
 		exit(0);
 	}
-	else if (pid < 0)
+	else if (pid > 0)
+		wait(&pid);
+	else
 	{
 		ft_strdel(&path);
 		ft_putendl_fd("Fork failed to create process", 2);
 		return (-1);
 	}
-	else if (pid > 0)
-		wait(&pid);
 	ft_strdel(&path);
 	return (1);
 }
@@ -100,8 +100,6 @@ static int		find_builtin(char **cmd, char **env)
 
 	i = -1;
 	path = walking_path(env, "PATH");
-	if (!ft_strcmp(cmd[0], "/"))
-			return (0);
 	while (path && path[++i])
 	{
 		abs_path = ft_strjoin(path[i], "/");
@@ -124,18 +122,23 @@ int				exec_cmd(char **cmd, char ***env)
 {
 	struct stat	buf;
 
+	if (!ft_strcmp(cmd[0], "/"))
+	{
+		cd_builtin(&cmd[0], env);
+		return (0);
+	}
 	if (check_builtins(cmd, env) || find_builtin(cmd, *env))
 		return (0);
 	if (check_builtins(cmd, env) == -1)
 		return (-1);
 	if (lstat(cmd[0], &buf) != -1)
 	{
-		if (buf.st_mode & S_IFREG)
-			my_printf("Minishell: command not found: %s\n", cmd[0]);
-		else if (buf.st_mode & S_IFDIR)
+		if (buf.st_mode & S_IFDIR)
 			cd_builtin(cmd, env);
 		else if (buf.st_mode & S_IXUSR)
 			return (run_fork(ft_strdup(cmd[0]), cmd, *env));
+		else
+			my_printf("Minishell: command not found: %s\n", cmd[0]);
 	}
 	else
 		my_printf("Minishell: command not found: %s\n", cmd[0]);

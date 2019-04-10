@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:21:02 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/09 17:07:16 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/10 19:48:23 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -112,6 +112,7 @@ int			setenv_builtin(char **cmd, char ***env)
 		else
 			var = ft_strndup(cmd[i], j);
 	}
+	//value = parse_value(value, *env) : 0;
 	*env = setenv_var(var, *env, value);
 	free(var);
 	return (1);

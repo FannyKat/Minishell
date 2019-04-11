@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:21:02 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/10 19:48:23 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/11 18:22:26 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -100,7 +100,7 @@ int			setenv_builtin(char **cmd, char ***env)
 	if (!cmd[0] || cmd[1])
 		return (error(1));
 	value = ft_strchr(*cmd, '=');
-	value = manage_dollar(value, *env);
+	value = ft_strjoin("=", parse_value(value + 1, *env));
 	while (cmd && cmd[++i])
 	{
 		j = -1;
@@ -112,7 +112,6 @@ int			setenv_builtin(char **cmd, char ***env)
 		else
 			var = ft_strndup(cmd[i], j);
 	}
-	//value = parse_value(value, *env) : 0;
 	*env = setenv_var(var, *env, value);
 	free(var);
 	return (1);
@@ -133,7 +132,7 @@ int			echo_builtin(char **cmd, char ***env)
 	flag ? i++ : 0;
 	while (cmd && cmd[++i])
 	{
-		cmd[i] = manage_dollar(cmd[i], *env);
+		cmd[i] = parse_value(cmd[i], *env);
 		cmd[i] = manage_tilde(&cmd[i], *env);
 		j = -1;
 		while (cmd[i] && cmd[i][++j])

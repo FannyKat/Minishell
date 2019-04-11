@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 14:17:56 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/10 19:34:05 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/11 19:48:39 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -74,27 +74,30 @@ char			**mini_env(char **new_env, char *pwd)
 	new_env[2] = ft_strjoin("HOME=", pw->pw_dir);
 	new_env[3] = ft_strjoin("USER=", get_usr());
 	new_env[4] = ft_strdup("TERM=xterm-256color");
-	new_env[5] = ft_strjoin("SHELL=", pw->pw_shell);
-	new_env[6] = ft_strdup("SHLVL=2");
-	new_env[7] = ft_strjoin("OLDPWD=", pw->pw_dir);
+	new_env[5] = ft_strdup("SHELL=minishell");
+	new_env[6] = ft_strdup("SHLVL=0");
+	new_env[7] = ft_strjoin("OLDPWD=", getcwd(pwd, BUFF_SIZE));
 	new_env[8] = NULL;
 	return (new_env);
 }
 
-void			increase_shlvl(char **cmd, char ***env)
+char			**increase_shlvl(char **cmd, char **env)
 {
 	char		*shlvl;
 	char		*lvl;
+	char		**new_env;
 
-	if (!ft_strcmp(cmd[0], "./minishell"))
+	new_env = NULL;
+	if (!ft_strcmp(cmd[0], "./minishell") || !ft_strcmp(cmd[0], "minishell"))
 	{
-		shlvl = get_value("$SHLVL", *env);
+		shlvl = get_value("$SHLVL", env);
 		lvl = ft_itoa(ft_atoi(shlvl) + 1);
 		shlvl = ft_strjoin("=", lvl);
-		setenv_var("SHLVL", *env, shlvl);
+		new_env = setenv_var("SHLVL", env, shlvl);
 		ft_strdel(&shlvl);
 		ft_strdel(&lvl);
 	}
+	return (new_env);
 }
 
 int				main(int ac, char **av, char **env)
@@ -110,12 +113,14 @@ int				main(int ac, char **av, char **env)
 		return (0);
 	if (ac == 1 && !av[1])
 	{
-		
+		cmd = ft_tabcopy(cmd, av);
 		if (!*env)
 			new_env = mini_env(new_env, *av);
 		else
 			new_env = ft_tabcopy(new_env, env);
-		increase_shlvl(av, &new_env);
+		new_env = setenv_var("SHELL", new_env, "=minishell");
+		new_env = increase_shlvl(cmd, new_env);
+		write(2, "\33[H\33[2J\33]0;", 7);
 		minishell(&new_env, cmd, input);
 		ft_tabfree(new_env);
 	}

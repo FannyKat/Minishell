@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 11:29:24 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/10 15:15:04 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/11 18:47:29 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,7 @@ static int		run_fork(char *path, char **av, char **env)
 	{
 		if (access(path, X_OK) == -1)
 		{
-			my_printf("%s: Permission Denied\n", path);
+			my_printf("Minishell: %s: Permission denied\n", path);
 			exit(0);
 		}
 		if (execve(path, av, env) == -1)
@@ -134,13 +134,13 @@ int				exec_cmd(char **cmd, char ***env)
 	if (lstat(cmd[0], &buf) != -1)
 	{
 		if (buf.st_mode & S_IFDIR)
+		{
 			cd_builtin(cmd, env);
+			return (0);
+		}
 		else if (buf.st_mode & S_IXUSR)
 			return (run_fork(ft_strdup(cmd[0]), cmd, *env));
-		else
-			my_printf("Minishell: command not found: %s\n", cmd[0]);
 	}
-	else
-		my_printf("Minishell: command not found: %s\n", cmd[0]);
+	my_printf("Minishell: %s: command not found\n", cmd[0]);
 	return (0);
 }

@@ -6,37 +6,59 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/10 15:17:37 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/10 19:47:30 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/11 20:26:12 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "minishell.h"
 
-char			*parse_value(char *value, char **env)
+char			*check_var(char *value, char *cmd, char **env, int i)
 {
-	int			i;
+	char		*tmp;
+	char		*var;
+	char		*new;
 	int			j;
 	int			pos;
-	char		*tmp;
+
+	new = NULL;
+	tmp = NULL;
+	var = NULL;
+	j = 0;
+	pos = i;
+	while (ft_isupper(cmd[++i]))
+		j++;
+	tmp = ft_strndup(&cmd[pos], j + 1);
+	var = manage_dollar(tmp, env);
+	value ? new = ft_strjoin(value, var) : 0;
+	!value ? new = ft_strdup(var) : 0;
+	return (new);
+}
+
+char			*parse_value(char *cmd, char **env)
+{
+	char		*new_value;
+	int			i;
 
 	i = -1;
-	tmp = NULL;
-	while (value[++i])
+	new_value = NULL;
+	while (cmd[++i])
 	{
-		if (value[i] == '$')
+		if (cmd[i] == '$')
 		{
-			j = 0;
-			i++;
-			pos = i;
-			while (ft_isupper(value[i++]))
-				j++;
-			tmp = ft_strsub(value, i - j - 2, j + 2);
-			printf("%s\n", tmp);
-			tmp = manage_dollar(tmp, env);
+			new_value = check_var(new_value, cmd, env, i);
+			while (ft_isupper(cmd[++i]))
+				;
+			i--;
+		}
+		else
+		{
+			if (new_value)
+				new_value = ft_strnjoin(new_value, &cmd[i], 1);
+			else
+				new_value = ft_strndup(&cmd[i], 1);
 		}
 	}
-	value = ft_strjoin("=", tmp);
-	return (value);
+	return (new_value);
 }
 
 char			*manage_dollar(char *cmd, char **env)

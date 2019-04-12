@@ -12,7 +12,7 @@ SRCS	=	ft_strlen.c ft_strdup.c ft_strcpy.c ft_strncpy.c ft_strcat.c ft_strncat.c
 			ft_xlstadd.c my_printf.c function.c ft_split.c ft_memdel.c ft_memset.c\
 			ft_bzero.c ft_isalnum.c ft_isalpha.c ft_isdigit.c ft_strndup.c isstart.c\
 			ft_tablen.c print_tab.c ft_tabcopy.c ft_tabfree.c realloc_tab.c strlen_to.c\
-			ft_strnjoin.c\
+			ft_strnjoinclr.c ft_strjoinclr.c strdupfree.c\
 
 INC		=	libft.h
 

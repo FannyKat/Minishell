@@ -26,27 +26,18 @@ void			display_prompt(void)
 {
 	char		path[BUFF_SIZE];
 	char		*prompt;
-	int			len;
 
-	len = -1;
-	if (getcwd(path, BUFF_SIZE))
-		len = ft_strlen(path) - 1;
 	prompt = NULL;
-	while (path[len--])
+
+	if (!getcwd(path, BUFF_SIZE))	
 	{
-		if (path[len + 1] == '/')
-		{
-			prompt = ft_strdup("/");
-			break ;
-		}
-		if (path[len] == '/')
-		{
-			prompt = ft_strdup(path + len + 1);
-			break ;
-		}
-	}
-	if (!prompt)
 		prompt = ft_strdup("?");
-	my_printf("\033[38;5;177m[%s]\033[0m ", prompt);
+		my_printf("\033[38;5;177m[%s]\033[0m ", prompt);
+	}
+	else
+	{
+		prompt = ft_strdup(ft_strrchr(path, '/'));
+		my_printf("\033[38;5;177m[%s]\033[0m ", prompt + 1);	
+	}	
 	ft_strdel(&prompt);
 }

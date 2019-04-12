@@ -99,8 +99,8 @@ int			setenv_builtin(char **cmd, char ***env)
 	i = -1;
 	if (!cmd[0] || cmd[1])
 		return (error(1));
-	value = ft_strchr(*cmd, '=');
-	value = ft_strjoin("=", parse_value(value + 1, *env));
+	if ((value = ft_strchr(*cmd, '=')))
+		value = strdupfree(parse_value(value, *env));
 	while (cmd && cmd[++i])
 	{
 		j = -1;
@@ -113,6 +113,7 @@ int			setenv_builtin(char **cmd, char ***env)
 			var = ft_strndup(cmd[i], j);
 	}
 	*env = setenv_var(var, *env, value);
+	ft_strdel(&value);
 	free(var);
 	return (1);
 }

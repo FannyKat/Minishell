@@ -118,7 +118,7 @@ static int		find_builtin(char **cmd, char **env)
 	return (0);
 }
 
-int				exec_cmd(char **cmd, char ***env)
+int				execution(char **cmd, char ***env)
 {
 	struct stat	buf;
 

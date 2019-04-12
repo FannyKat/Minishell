@@ -26,7 +26,7 @@ void	display_prompt(void);
 void	signal_handler(int signum);
 void	process_signal_handler(int signum);
 char	*get_usr(void);
-int		exec_cmd(char **cmd, char ***env);
+int		execution(char **cmd, char ***env);
 int		echo_builtin(char **cmd, char ***env);
 int		setenv_builtin(char **cmd, char ***env);
 int		unsetenv_builtin(char **cmd, char ***env);

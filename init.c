@@ -26,7 +26,7 @@ int				split_cmd(char **cmds, char ***env)
 		cmds[i] = manage_tilde(&cmds[i], *env);
 		cmd = ft_split(cmds[i]);
 		if (*cmd)
-			ret = exec_cmd(cmd, env);
+			ret = execution(cmd, env);
 		ft_tabfree(cmd);
 		if (ret == -1)
 			break ;

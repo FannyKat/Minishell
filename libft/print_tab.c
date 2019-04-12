@@ -6,17 +6,17 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 12:24:51 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/21 12:25:43 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/12 10:36:06 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-void		print_tab(char **tab)
+void		print_tab(char **array)
 {
 	int		i;
 
 	i = -1;
-	while (tab && tab[++i])
-		my_printf("%s\n", tab[i]);
+	while (array && array[++i])
+		my_printf("%s\n", array[i]);
 }

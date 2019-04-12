@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 14:17:56 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/11 19:48:39 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/12 11:08:48 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -15,8 +15,8 @@
 int				split_cmd(char **cmds, char ***env)
 {
 	char		**cmd;
-	int			i;
 	int			ret;
+	int			i;
 
 	i = -1;
 	ret = 0;
@@ -25,6 +25,7 @@ int				split_cmd(char **cmds, char ***env)
 		cmds[i] = manage_dollar(cmds[i], *env);
 		cmds[i] = manage_tilde(&cmds[i], *env);
 		cmd = ft_split(cmds[i]);
+		ft_strdel(&cmds[i]);
 		if (*cmd)
 			ret = execution(cmd, env);
 		ft_tabfree(cmd);
@@ -34,7 +35,7 @@ int				split_cmd(char **cmds, char ***env)
 	return (ret);
 }
 
-int				minishell(char ***new_env, char **cmd, char *input)
+int				minishell(char ***env, char **cmd, char *input)
 {
 	while (1)
 	{
@@ -51,7 +52,7 @@ int				minishell(char ***new_env, char **cmd, char *input)
 		ft_tabfree(cmd);
 		cmd = ft_strsplit(input, ';');
 		ft_strdel(&input);
-		if (split_cmd(cmd, new_env) == -1)
+		if (split_cmd(cmd, env) == -1)
 		{
 			ft_tabfree(cmd);
 			break ;
@@ -90,7 +91,7 @@ char			**increase_shlvl(char **cmd, char **env)
 	new_env = NULL;
 	if (!ft_strcmp(cmd[0], "./minishell") || !ft_strcmp(cmd[0], "minishell"))
 	{
-		shlvl = get_value("$SHLVL", env);
+		shlvl = get_env("$SHLVL", env);
 		lvl = ft_itoa(ft_atoi(shlvl) + 1);
 		shlvl = ft_strjoin("=", lvl);
 		new_env = setenv_var("SHLVL", env, shlvl);

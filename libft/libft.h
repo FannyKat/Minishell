@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2018/11/06 16:17:01 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/11 13:25:40 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/12 10:38:10 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -37,11 +37,11 @@ typedef struct		s_list
 	struct s_list	*next;
 }					t_list;
 
-char				**realloc_tab(char **tab, int len);
-void				ft_tabfree(char **tab);
-char				**ft_tabcopy(char **tab_dest, char **tab);
-void				print_tab(char **tab);
-int					ft_tablen(char **tab);
+char				**realloc_tab(char **array, int len);
+void				ft_tabfree(char **array);
+char				**ft_tabcopy(char **tab_dest, char **tab_copy);
+void				print_tab(char **array);
+int					ft_tablen(char **array);
 int					isstart(char *s1, char *s2);
 int					ft_isupper(int c);
 int					ft_isalnum(int c);

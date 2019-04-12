@@ -6,20 +6,20 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 12:15:49 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/03/21 12:16:34 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/12 10:36:58 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "libft.h"
 
-int			ft_tablen(char **tab)
+int			ft_tablen(char **array)
 {
 	int		i;
 	int		count;
 
 	i = -1;
 	count = 0;
-	while (tab[++i])
+	while (array[++i])
 		count++;
 	return (count);
 }

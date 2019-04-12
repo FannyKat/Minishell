@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/15 16:50:10 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/02 14:04:38 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/12 09:39:00 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -65,8 +65,8 @@ char		*ft_strcpy_to_space(char *dest, char *src)
 
 char		**ft_split(char *s)
 {
-	int		words_count;
 	char	**tab;
+	int		words_count;
 	int		i;
 
 	i = 0;

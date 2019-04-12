@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/12 09:29:55 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/12 11:16:15 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/12 16:50:06 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -72,14 +72,12 @@ char			*manage_dollar(char *cmd, char **env)
 			i = strlen_to(cmd, '/');
 			value = ft_strndup(cmd, i);
 			ft_strdel(&cmd);
-			cmd = ft_strjoin(get_env(value, env), tmp);
+			cmd = ft_strjoinclr(get_value(value, env), tmp, 2);
 			ft_strdel(&value);
-			ft_strdel(&tmp);
 			return (cmd);
 		}
-		value = ft_strdup(cmd);
-		ft_strdel(&cmd);
-		cmd = ft_strdup(get_env(value, env));
+		value = strdupfree(cmd);
+		cmd = ft_strdup(get_value(value, env));
 		ft_strdel(&value);
 	}
 	return (cmd);
@@ -95,15 +93,14 @@ char			*manage_tilde(char **path, char **env)
 		if (!ft_strcmp(*path, "~") || !ft_strcmp(*path + 1, get_usr()))
 		{
 			ft_strdel(path);
-			*path = ft_strdup(get_env("$HOME", env));
+			*path = ft_strdup(get_value("$HOME", env));
 			return (*path);
 		}
 		if ((value = ft_strchr(*path, '/')))
 		{
 			value = ft_strdup(ft_strchr(*path, '/'));
 			ft_strdel(path);
-			*path = ft_strjoin(get_env("$HOME", env), value);
-			ft_strdel(&value);
+			*path = ft_strjoinclr(get_value("$HOME", env), value, 2);
 		}
 	}
 	return (*path);

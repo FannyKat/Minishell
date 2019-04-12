@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/04/03 11:29:24 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/12 09:59:57 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/12 16:44:57 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -62,7 +62,8 @@ static int		check_builtins(char **cmd, char ***env)
 	}
 	else if (!ft_strcmp(cmd[0], "env"))
 	{
-		print_tab(*env);
+		if (!cmd[1])
+			print_tab(*env);
 		return (1);
 	}
 	return (0);
@@ -103,16 +104,14 @@ static int		find_builtin(char **cmd, char **env)
 	while (path && path[++i])
 	{
 		abs_path = ft_strjoin(path[i], "/");
-		tmp = ft_strjoin(abs_path, cmd[0]);
-		ft_strdel(&abs_path);
+		tmp = ft_strjoinclr(abs_path, cmd[0], 1);
 		abs_path = tmp;
-		if (lstat(abs_path, &fd) == -1)
-			ft_strdel(&abs_path);
-		else
+		if (lstat(abs_path, &fd) != -1 && !(fd.st_mode & S_IFDIR))
 		{
 			ft_tabfree(path);
 			return (run_fork(abs_path, cmd, env));
 		}
+		ft_strdel(&abs_path);
 	}
 	ft_tabfree(path);
 	return (0);

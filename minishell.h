@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 14:19:11 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/12 10:26:58 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/12 16:47:00 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -22,7 +22,6 @@
 
 # define BUFF_SIZE 100
 
-void	termcaps(char **env);
 void	display_prompt(void);
 void	signal_handler(int signum);
 void	process_signal_handler(int signum);
@@ -36,10 +35,9 @@ int		error(int num);
 int		cd_error(char **path, char *pwd);
 int		exit_shell(char *input);
 int		find_pos(char *var, char **env);
-char	**realloc_env(char **env, int len);
 char	**remove_var(int pos, char **env);
 char	**setenv_var(char *var, char **env, char *value);
-char	*get_env(char *var, char **env);
+char	*get_value(char *var, char **env);
 char	*manage_tilde(char **path, char **env);
 char	*manage_dollar(char *path, char **env);
 char	*parse_value(char *value, char **env);

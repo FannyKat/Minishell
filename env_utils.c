@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/21 18:46:25 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/12 10:02:20 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/12 16:47:20 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,7 +33,7 @@ int			find_pos(char *var, char **env)
 	return (i);
 }
 
-char		*get_env(char *var, char **env)
+char		*get_value(char *var, char **env)
 {
 	char	*value;
 	int		pos;

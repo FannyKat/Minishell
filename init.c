@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 14:17:56 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/12 11:08:48 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/12 16:50:24 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -91,12 +91,11 @@ char			**increase_shlvl(char **cmd, char **env)
 	new_env = NULL;
 	if (!ft_strcmp(cmd[0], "./minishell") || !ft_strcmp(cmd[0], "minishell"))
 	{
-		shlvl = get_env("$SHLVL", env);
+		shlvl = get_value("$SHLVL", env);
 		lvl = ft_itoa(ft_atoi(shlvl) + 1);
-		shlvl = ft_strjoin("=", lvl);
+		shlvl = ft_strjoinclr("=", lvl, 2);
 		new_env = setenv_var("SHLVL", env, shlvl);
 		ft_strdel(&shlvl);
-		ft_strdel(&lvl);
 	}
 	return (new_env);
 }

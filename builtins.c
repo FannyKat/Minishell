@@ -6,7 +6,7 @@
 /*   By: fcatusse <marvin@42.fr>                    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2019/03/18 11:21:02 by fcatusse          #+#    #+#             */
-/*   Updated: 2019/04/12 11:18:18 by fcatusse         ###   ########.fr       */
+/*   Updated: 2019/04/12 16:47:43 by fcatusse         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -50,17 +50,17 @@ int			cd_builtin(char **path, char ***env)
 	if (*path == NULL)
 	{
 		ft_strdel(path);
-		*path = ft_strdup(get_env("$HOME", *env));
+		*path = ft_strdup(get_value("$HOME", *env));
 	}
 	else if (!ft_strcmp(*path, "-"))
 	{
 		ft_strdel(path);
-		*path = ft_strdup(get_env("$OLDPWD", *env));
+		*path = ft_strdup(get_value("$OLDPWD", *env));
 	}
 	*path ? *path = manage_tilde(path, *env) : 0;
 	*path ? *path = manage_dollar(*path, *env) : 0;
 	pwd = getcwd(*buff, BUFF_SIZE);
-	!pwd ? pwd = ft_strdup(get_env("$PWD", *env)) : 0;
+	!pwd ? pwd = ft_strdup(get_value("$PWD", *env)) : 0;
 	return (change_dir(*env, path, *buff, pwd));
 }
 
@@ -76,10 +76,7 @@ int			unsetenv_builtin(char **cmd, char ***env)
 	i = -1;
 	while (cmd && cmd[++i])
 	{
-		j = -1;
-		j = strlen_to(cmd[i], '=');
-		if (j == (int)ft_strlen(cmd[i]))
-			return (error(2));
+		j = strlen(cmd[i]);
 		var = ft_strndup(cmd[i], j);
 		pos = find_pos(var, *env);
 		ft_strdel(&var);
@@ -99,8 +96,8 @@ int			setenv_builtin(char **cmd, char ***env)
 	i = -1;
 	if (!cmd[0] || cmd[1])
 		return (error(1));
-	if ((value = ft_strdup(ft_strchr(*cmd, '='))))
-		value = strdupfree(parse_value(value, *env));
+	value = ft_strchr(*cmd, '=');
+	value ?	value = strdupfree(parse_value(ft_strdup(value), *env)) : 0;
 	while (cmd && cmd[++i])
 	{
 		j = -1;

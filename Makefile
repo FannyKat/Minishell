@@ -9,7 +9,6 @@ OBJS	= $(addprefix $(OBJ_DIR), $(SRCS:.c=.o))
 
 LIB_DIR	= ./libft/
 LIB	= ./libft/libft.a
-LIB_INC	= ./libft/includes/
 
 CC	= gcc
 CFLAGS	= -Wall -Werror -Wextra
@@ -21,7 +20,7 @@ END	=	\033[0m
 
 all: $(OBJ_DIR) $(LIB) $(NAME)
 
-$(LIB):
+lib:
 	@make -C $(LIB_DIR)
 	@echo "${MAGENTA}LIBRARY COMPILED ✓${END}"
 
@@ -29,11 +28,14 @@ $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
 $(OBJ_DIR)%.o:$(SRC_DIR)%.c
-	@$(CC) $(CFLAGS) -I$(LIB_INC) -I$(INC) -o $@ -c $<
+	@$(CC) $(CFLAGS) -I$(LIB_DIR) -I$(INC) -o $@ -c $<
 
-$(NAME): $(LIB) $(OBJS)
+$(NAME): lib $(OBJS)
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB)
 	@echo "${PINK}MINISHELL IS READY ✓${END}"	
+
+$(LIB):
+	@make -C $(LIB_DIR)
 
 $(OBJS):	$(INC) 
 

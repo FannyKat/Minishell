@@ -21,6 +21,10 @@ END	=	\033[0m
 
 all: $(OBJ_DIR) $(LIB) $(NAME)
 
+$(LIB):
+	@make -C $(LIB_DIR)
+	@echo "${MAGENTA}LIBRARY COMPILED ✓${END}"
+
 $(OBJ_DIR):
 	@mkdir -p $(OBJ_DIR)
 
@@ -30,10 +34,6 @@ $(OBJ_DIR)%.o:$(SRC_DIR)%.c
 $(NAME): $(LIB) $(OBJS)
 	@$(CC) $(CFLAGS) -o $(NAME) $(OBJS) $(LIB)
 	@echo "${PINK}MINISHELL IS READY ✓${END}"	
-
-$(LIB):
-	@make -C $(LIB_DIR)
-	@echo "${MAGENTA}LIBRARY COMPILED ✓${END}"
 
 $(OBJS):	$(INC) 
 

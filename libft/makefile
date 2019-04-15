@@ -8,15 +8,15 @@ INC	=	libft.h
 
 OBJ	= 	$(SRCS:.c=.o)
 
-all: 		$(NAME)
+$(OBJ):		$(INC)
 
 $(NAME): 	$(OBJ)
-			@ar rc $(NAME) $(OBJ)
-
-$(OBJ):		$(INC)
+			@ar rcs $(NAME) $(OBJ)
 
 $(OBJ): 	$(SRCS)
 			@gcc $(FLAGS) $(SRCS)
+
+all: 		$(NAME)
 
 clean:
 			@rm -rf $(OBJ)
